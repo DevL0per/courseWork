@@ -1,0 +1,13 @@
+.myclass{
+    text-align: center;
+}
+
+.loginFieldClass {
+    margin-bottom: 1%;
+}
+
+.registrationButton {
+    margin-top: 1%;
+    border: 0;
+    color: gray;
+}

@@ -1,0 +1,42 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    width: 960px;
+    margin: 0 auto;
+}
+
+nav:before {
+    content: '';
+    display: block;
+    height: 50px;
+    width: 100%;
+    background: #000;
+    position: absolute;
+    left: 0;
+    z-index: -1;
+}
+
+nav ul {
+    list-style: none;
+    height: 50px;
+}
+
+nav ul li {
+    float: right;
+}
+
+nav ul li input {
+    background: black;
+    color: white;
+    display: block;
+    height: 50px;
+    padding: 0 30px;
+    text-transform: uppercase;
+    text-decoration: none;
+    line-height: 50px;
+    border: 0;
+}
+
