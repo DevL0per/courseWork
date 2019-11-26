@@ -3,21 +3,19 @@
 <html>
 <head>
     <title>List</title>
+    <style><%@include file="../css/listStyle.css"%></style>
 </head>
 <body>
  <%@ include file="header.jsp"%>
  <br/>
- Факультеты
+  Факультеты
  <hr/>
-     <ul>
  <c:forEach var="faculty" items="${requestScope.faculties}">
-     <li><form action="<c:url value="/MyServlet"/>" method="get">
+     <form action="<c:url value="/MyServlet"/>" method="get" class = "listForm">
          <input type="hidden" name="parameter" value="показать специальности факультета">
          <input type="hidden" name="facultyId" value="<c:out value="${faculty.id}"/>">
          <input type="submit" name = "faculty" value="<c:out value="${faculty.name}"/>">
      </form>
-     </li>
  </c:forEach>
-     </ul>
 </body>
 </html>

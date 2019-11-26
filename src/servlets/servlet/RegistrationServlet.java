@@ -2,8 +2,6 @@ package servlets.servlet;
 
 import dao.UserDAO;
 import model.Student;
-import model.university.Faculty;
-import model.university.Group;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,8 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @WebServlet("/registrationServlet")
 public class RegistrationServlet extends HttpServlet {
@@ -46,10 +42,11 @@ public class RegistrationServlet extends HttpServlet {
         }
 
         final Student student = new Student(name, surname, patronymic, number,
-                email, password, 1, Integer.valueOf(group), Integer.valueOf(studentNumber));
+                email, password, 1, Integer.valueOf(group), Integer.valueOf(studentNumber), 0.0);
 
         userDAO = new UserDAO();
         userDAO.create(student);
+        req.getRequestDispatcher("/web/index.jsp").forward(req, resp);
     }
 
     private boolean isRequestNotEmpty(String name,String surname,String patronymic,String studentNumber,

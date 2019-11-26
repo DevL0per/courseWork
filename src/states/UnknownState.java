@@ -7,10 +7,10 @@ import model.university.Specialty;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static java.util.Objects.nonNull;
 
 public class UnknownState implements State {
 
@@ -20,7 +20,7 @@ public class UnknownState implements State {
     List<Faculty> faculties = new CopyOnWriteArrayList<>();
 
     @Override
-    public void doRegistration(HttpServletRequest request, HttpServletResponse response) {
+    public void doRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         UserDAO userDAO = new UserDAO();
         faculties = userDAO.getAllFaculty();
@@ -36,17 +36,17 @@ public class UnknownState implements State {
     }
 
     @Override
-    public void gotoCabinet(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("error");
+    public void gotoCabinet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(405);
     }
 
     @Override
-    public void doLogout(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("error");
+    public void doLogout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(405);
     }
 
     @Override
-    public void doLogin(HttpServletRequest request, HttpServletResponse response) {
+    public void doLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             request.getRequestDispatcher("/WEB-INF/view/html/login.jsp").forward(request, response);
         } catch (Exception exp) {
@@ -55,60 +55,46 @@ public class UnknownState implements State {
     }
 
     @Override
-    public void doDeleteUser(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("error");
+    public void doDeleteUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(405);
     }
 
     @Override
-    public void gotoStudentList(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("error");
+    public void gotoStudentList(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        response.sendError(405);
     }
 
     @Override
-    public void calculateScholarship(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("error");
+    public void addStudentGrades(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(405);
     }
 
     @Override
-    public void showAllFaculties(HttpServletRequest request, HttpServletResponse response) {
-
-        if (!nonNull(request.getAttribute("faculties"))) {
-            UserDAO userDAO = new UserDAO();
-            faculties = userDAO.getAllFaculty();
-            request.setAttribute("faculties", faculties);
-        }
-        try {
-            request.getRequestDispatcher("/WEB-INF/view/html/listOfFaculty.jsp").forward(request, response);
-        } catch (Exception exp) {
-            exp.printStackTrace();
-        }
+    public void showAllFaculties(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        response.sendError(405);
     }
 
     @Override
-    public void showAllSpecialtyInFaculty(HttpServletRequest request, HttpServletResponse response, Integer facultyId) {
-        if (!nonNull(request.getAttribute("specialties"))) {
-            UserDAO userDAO = new UserDAO();
-            specialties = userDAO.getAllSpecialtyInFaculty(facultyId);
-            request.setAttribute("specialties", specialties);
-        }
-        try {
-            request.getRequestDispatcher("/WEB-INF/view/html/listOfSpecialities.jsp").forward(request, response);
-        } catch (Exception exp) {
-            exp.printStackTrace();
-        }
+    public void showAllSpecialtyInFaculty(HttpServletRequest request, HttpServletResponse response, Integer facultyId) throws IOException {
+        response.sendError(405);
     }
 
     @Override
-    public void showAllGroupsInSpecialty(HttpServletRequest request, HttpServletResponse response, Integer specialtyId) {
-        if (!nonNull(request.getAttribute("groups"))) {
-            UserDAO userDAO = new UserDAO();
-            groups = userDAO.getAllGroupInSpecialty(specialtyId);
-            request.setAttribute("groups", groups);
-        }
-        try {
-            request.getRequestDispatcher("/WEB-INF/view/html/listOfGroups.jsp").forward(request, response);
-        } catch (Exception exp) {
-            exp.printStackTrace();
-        }
+    public void showAllGroupsInSpecialty(HttpServletRequest request, HttpServletResponse response, Integer specialtyId) throws IOException {
+        response.sendError(405);
+    }
+
+    @Override
+    public void showAllStudentsInGroup(HttpServletRequest request, HttpServletResponse response, Integer groupId) throws IOException {
+        response.sendError(405);
+    }
+
+    @Override
+    public void goToStudentProfile(HttpServletRequest request, HttpServletResponse response, Integer profileId) throws IOException {
+        response.sendError(405);
+    }
+
+    @Override
+    public void showStudentGradesScreen(HttpServletRequest request, HttpServletResponse response) throws IOException {
     }
 }

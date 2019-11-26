@@ -2,6 +2,7 @@ package servlets.filter;
 
 import dao.UserDAO;
 import model.Role;
+import states.AccountantState;
 import states.State;
 import states.StudentState;
 import states.UnknownState;
@@ -59,7 +60,7 @@ public class AuthFilter implements Filter {
                 state = new StudentState();
                 break;
             case ACCOUNTANT:
-                state = new StudentState();
+                state = new AccountantState();
                 break;
             case UNKNOWN:
                 state = new UnknownState();

@@ -1,0 +1,11 @@
+.ExaminGrade {
+    margin: 10px;
+}
+
+.ExaminGrade input {
+    margin-left: 30px;
+}
+
+.calculateButton {
+    margin-left: 100px;
+}

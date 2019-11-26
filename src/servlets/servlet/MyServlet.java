@@ -39,20 +39,24 @@ public class MyServlet extends HttpServlet {
                 Integer facultyId = Integer.valueOf(req.getParameter("facultyId"));
                 state.showAllSpecialtyInFaculty(req, resp, facultyId);
                 break;
-            case "личный кабинет":
+            case "кабинет":
                 state.gotoCabinet(req, resp);
                 break;
             case "выйти":
                 state.doLogout(req, resp);
                 break;
             case "список студентов":
-                state.gotoStudentList(req, resp);
+                Integer groupId = Integer.valueOf(req.getParameter("group"));
+                state.showAllStudentsInGroup(req, resp, groupId);
                 break;
-            case  "расчет стипендии":
+            case "ввод оценок":
+                state.showStudentGradesScreen(req, resp);
+                break;
+            case "рассчитать":
                 state.calculateScholarship(req, resp);
                 break;
             default:
-                req.getRequestDispatcher("/web/index").forward(req, resp);
+                req.getRequestDispatcher("index.jsp").forward(req, resp);
                 break;
         }
     }

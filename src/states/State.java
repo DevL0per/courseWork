@@ -10,25 +10,31 @@ import java.nio.file.AccessDeniedException;
 
 public interface State {
 
-    void doRegistration(HttpServletRequest request, HttpServletResponse response);
+    void doRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
-    void gotoCabinet(HttpServletRequest request, HttpServletResponse response);
+    void gotoCabinet(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
-    void doLogout(HttpServletRequest request, HttpServletResponse response);
+    void doLogout(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
-    void doLogin(HttpServletRequest request, HttpServletResponse response);
+    void doLogin(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
-    void doDeleteUser(HttpServletRequest request, HttpServletResponse response);
+    void doDeleteUser(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
-    void gotoStudentList(HttpServletRequest request, HttpServletResponse response);
+    void gotoStudentList(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
-    void calculateScholarship(HttpServletRequest request, HttpServletResponse response);
+    void addStudentGrades(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
-    void showAllFaculties(HttpServletRequest request, HttpServletResponse response);
+    void showAllFaculties(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
-    void showAllSpecialtyInFaculty(HttpServletRequest request, HttpServletResponse response, Integer facultyId);
+    void showAllSpecialtyInFaculty(HttpServletRequest request, HttpServletResponse response, Integer facultyId) throws IOException;
 
-    void showAllGroupsInSpecialty(HttpServletRequest request, HttpServletResponse response, Integer specialtyId);
+    void showAllGroupsInSpecialty(HttpServletRequest request, HttpServletResponse response, Integer specialtyId) throws IOException;
+
+    void showAllStudentsInGroup(HttpServletRequest request, HttpServletResponse response, Integer groupId) throws IOException;
+
+    void goToStudentProfile(HttpServletRequest request, HttpServletResponse response, Integer profileId) throws IOException;
+
+    void showStudentGradesScreen(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
     default void removeUserAttributes(HttpServletRequest request, HttpServletResponse response) {
         request.removeAttribute("login");

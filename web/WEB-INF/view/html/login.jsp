@@ -13,7 +13,7 @@
 </head>
 <body>
     <%@ include file="header.jsp"%>
-<div class="myclass">
+<div class="myClass">
     <h1>Login</h1>
     <form method="post" action="${pageContext.request.contextPath}/MyServlet">
         <input type="text" required placeholder="email" name="login" class = "loginFieldClass">
@@ -21,9 +21,8 @@
         <input type="password" required placeholder="password" name="password" class = "loginFieldClass">
         <br/>
         <input type="submit" value="Войти">
-        <br/>
     </form>
-    <form method="get" action="${pageContext.request.contextPath}/registrationServlet">
+    <form method="get" action="${pageContext.request.contextPath}/registrationServlet" class = "registrationButton">
         <input type="submit" name = "button" value="Регистрация">
     </form>
 </div>

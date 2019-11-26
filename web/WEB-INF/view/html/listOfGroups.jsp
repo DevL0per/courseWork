@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>ListOfGroups</title>
+    <style><%@include file="../css/listStyle.css"%></style>
 </head>
 <body>
 <%@ include file="header.jsp"%>
@@ -10,11 +11,10 @@
 Группы
 <hr/>
 <c:forEach var="group" items="${requestScope.groups}">
-    <li><form action="<c:url value="/MyServlet"/>" method="get">
-        <input type="hidden" name="parameter" value="показать группы специальности">
+    <form action="<c:url value="/MyServlet"/>" method="get" class = "listForm">
+        <input type="hidden" name="parameter" value="список студентов">
         <input type="submit" name = "group" value="<c:out value="${group.numberOfGroup}"/>">
     </form>
-    </li>
 </c:forEach>
 </body>
 </html>

@@ -1,4 +1,4 @@
-.myclass{
+.myClass{
     text-align: center;
 }
 
@@ -6,8 +6,10 @@
     margin-bottom: 1%;
 }
 
-.registrationButton {
-    margin-top: 1%;
+.registrationButton input{
+    margin-top: 10px;
+    border: none;
     border: 0;
     color: gray;
+    background: white;
 }

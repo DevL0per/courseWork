@@ -4,9 +4,7 @@ import model.AbstractUser;
 import model.Accountant;
 import model.Role;
 import model.Student;
-import model.university.Faculty;
-import model.university.Group;
-import model.university.Specialty;
+import model.university.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,6 +28,35 @@ public class UserDAO extends AbstractController {
 
     public UserDAO() { }
 
+    public List<Subject> getAllSubjects() {
+        List<Subject> list = new ArrayList<>();
+        PreparedStatement statement = getPrepareStatement("SELECT * FROM Предмет");
+        try {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Integer id = resultSet.getInt("КодПредмета");
+                String name = resultSet.getString("Название");
+                Subject subject = new Subject(id, name);
+                list.add(subject);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public void addStudentScholarshipById(Integer userId, Double scholarship) {
+        PreparedStatement statement = getPrepareStatement("UPDATE Студент SET Стипендия = ?" +
+                " WHERE УчетнаяЗапись_КодУчетнойЗаписи = ?");
+        try {
+            statement.setDouble(1, scholarship);
+            statement.setInt(2, userId);
+            statement.executeUpdate();
+        } catch (Exception exp) {
+            exp.printStackTrace();
+        }
+    }
+
     @Override
     public <T> boolean update(T value, String tableName, String field) {
         PreparedStatement statement = getPrepareStatement("INSERT " + field +
@@ -47,18 +74,22 @@ public class UserDAO extends AbstractController {
         return true;
     }
 
-    public List getAllStudents() {
+    public <T> List getAllStudentsWhere(String addedCommand, T value) {
         List<Student> list = new ArrayList<>();
-        PreparedStatement statement = getPrepareStatement(GET_ALL_COMMAND);
+        PreparedStatement statement = getPrepareStatement(GET_ALL_COMMAND + " " + addedCommand);
         PreparedStatement statement2 = getPrepareStatement("SELECT * FROM УчетнаяЗапись " +
                 "WHERE КодУчетнойЗаписи = ?");
         try {
+            if (addedCommand != null) {
+                statement.setObject(1, value);
+            }
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
 
                 Integer studentNumber = resultSet.getInt("НомерСтудБилета");
                 Integer accountCode = resultSet.getInt("УчетнаяЗапись_КодУчетнойЗаписи");
                 Integer numberOfGroup = resultSet.getInt("Группа_НомерГруппы");
+                Double scholarship = resultSet.getDouble("Стипендия");
 
                 statement2.setInt(1, accountCode);
                 ResultSet accountResult = statement2.executeQuery();
@@ -71,7 +102,7 @@ public class UserDAO extends AbstractController {
                     String email = accountResult.getString("Почта");
                     String password = accountResult.getString("Пароль");
                     Student student = new Student(name, surname, patronymic, number,
-                            email, password, accountCode, numberOfGroup, studentNumber);
+                            email, password, accountCode, numberOfGroup, studentNumber, scholarship);
                     list.add(student);
                 }
             }
@@ -79,6 +110,21 @@ public class UserDAO extends AbstractController {
             exp.printStackTrace();
         }
         return list;
+    }
+
+    public Integer getIdByAccountIdByLoginAndPassword(String login, String password) {
+        PreparedStatement statement = getPrepareStatement("SELECT * FROM УчетнаяЗапись WHERE Почта= ? AND Пароль=?");
+        try {
+            statement.setString(1, login);
+            statement.setString(2, password);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                return resultSet.getInt("КодУчетнойЗаписи");
+            }
+        } catch (Exception exp) {
+            exp.printStackTrace();
+        }
+        return 0;
     }
 
     public List getAllFaculty() {
@@ -117,6 +163,45 @@ public class UserDAO extends AbstractController {
             exp.printStackTrace();
         }
         return list;
+    }
+
+    public Group getGroupById(Integer numberOfGroup) {
+        Group group = null;
+        PreparedStatement statement = getPrepareStatement("SELECT * FROM Группа WHERE" +
+                " НомерГруппы = ?");
+        try {
+            statement.setInt(1, numberOfGroup);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Integer groupNumber = resultSet.getInt("НомерГруппы");
+                Integer course = resultSet.getInt("Курс");
+                Integer specialtyId = resultSet.getInt("Специальность_КодСпециальности");
+                group = new Group(groupNumber, course, specialtyId);
+            }
+            closePrepareStatement(statement);
+        } catch (SQLException exp) {
+            exp.printStackTrace();
+        }
+        return group;
+    }
+
+    public Specialty getSpecialtyById(Integer numberOfSpecialty) {
+        Specialty specialty = null;
+        PreparedStatement statement = getPrepareStatement("SELECT * FROM Специальность WHERE" +
+                " КодСпециальности = ?");
+        try {
+            statement.setInt(1, numberOfSpecialty);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                String name = resultSet.getString("Название");
+                Integer facultyCode = resultSet.getInt("Факультет_КодФакультета");
+                specialty = new Specialty(numberOfSpecialty, name, facultyCode);
+            }
+            closePrepareStatement(statement);
+        } catch (SQLException exp) {
+            exp.printStackTrace();
+        }
+        return specialty;
     }
 
     public List getAllSpecialtyInFaculty(Integer facultyId) {
@@ -205,7 +290,7 @@ public class UserDAO extends AbstractController {
 
     public Object getStudentById(Integer id) {
         Student student = null;
-        PreparedStatement statement = getPrepareStatement("SELECT * FROM УчетнаяЗапись " +
+        PreparedStatement statement = getPrepareStatement("SELECT * FROM Студент " +
                 "WHERE УчетнаяЗапись_КодУчетнойЗаписи = ?" );
         PreparedStatement statement2 = getPrepareStatement("SELECT * FROM УчетнаяЗапись " +
                 "WHERE КодУчетнойЗаписи = ?");
@@ -217,6 +302,7 @@ public class UserDAO extends AbstractController {
                 Integer studentNumber = resultSet.getInt("НомерСтудБилета");
                 Integer accountCode = resultSet.getInt("УчетнаяЗапись_КодУчетнойЗаписи");
                 Integer numberOfGroup = resultSet.getInt("Группа_НомерГруппы");
+                Double scholarship = resultSet.getDouble("Стипендия");
 
                 statement2.setInt(1, id);
                 ResultSet accountResult = statement2.executeQuery();
@@ -229,7 +315,7 @@ public class UserDAO extends AbstractController {
                     String email = accountResult.getString("Почта");
                     String password = accountResult.getString("Пароль");
                     student = new Student(name, surname, patronymic, number,
-                            email, password, accountCode, numberOfGroup, studentNumber);
+                            email, password, accountCode, numberOfGroup, studentNumber, scholarship);
                 }
             }
         } catch (Exception exp) {
@@ -238,6 +324,40 @@ public class UserDAO extends AbstractController {
         return student;
     }
 
+    public Integer getSubjectIdByName(String name) {
+        Integer id = null;
+        PreparedStatement statement = getPrepareStatement("SELECT * FROM Предмет" +
+                "WHERE Название = ?" );
+        try {
+            statement.setString(1, name);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                id = resultSet.getInt("КодПредмета");
+            }
+            closePrepareStatement(statement);
+        } catch (Exception exp) {
+            exp.printStackTrace();
+        }
+        return id;
+    }
+
+
+    public boolean addGrades(StudentProgress studentProgress) {
+        PreparedStatement statement = getPrepareStatement("INSERT INTO Успеваемость " +
+                "(Оценка, Предмет_КодПредмета, Студент_НомерСтудБилета) values (?, ?, ?) ");
+        try {
+            statement.setInt(1, studentProgress.getGrade());
+            statement.setInt(2, studentProgress.getNumberOfSubject());
+            statement.setInt(3, studentProgress.getNumberOfStudent());
+
+            statement.executeUpdate();
+            closePrepareStatement(statement);
+        } catch (Exception exp) {
+            exp.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
     @Override
     public boolean delete(Integer id) {

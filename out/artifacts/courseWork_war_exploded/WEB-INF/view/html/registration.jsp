@@ -19,7 +19,7 @@
  Регистрация
 <hr/>
 <div class = "window">
-    <form method="post">
+    <form action="<c:url value="/registrationServlet"/>" method="post">
 
         <div class = "field">
             <label for = "in1">Имя</label>

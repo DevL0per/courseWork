@@ -17,12 +17,15 @@
         <form action="<c:url value="/MyServlet"/>" method="get">
             <li> <input type = "submit" name = "parameter" value="выйти"> </li>
         </form>
-        <%}%>
         <form action="<c:url value="/MyServlet"/>" method="get">
-            <li> <input type = "submit" name = "parameter" value="регистрация"> </li>
+            <li> <input type = "submit" name = "parameter" value="кабинет"> </li>
         </form>
         <form action="<c:url value="/MyServlet"/>" method="get">
             <li> <input type = "submit" name = "parameter" value="факультеты"> </li>
+        </form>
+        <%}%>
+        <form action="<c:url value="/MyServlet"/>" method="get">
+            <li> <input type = "submit" name = "parameter" value="регистрация"> </li>
         </form>
     </ul>
 </nav>
