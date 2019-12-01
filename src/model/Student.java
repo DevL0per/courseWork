@@ -6,15 +6,34 @@ public class Student extends AbstractUser {
     private Integer numberOfGroup;
     private Role role;
     private Double scholarship;
+    private String formOfTraining;
 
     public Student(String name, String surname, String patronymic,
                    String phoneNumber, String email, String password,
-                   Integer accountCode, Integer group, Integer studentNumber, Double scholarship) {
+                   Integer accountCode, Integer group, Integer studentNumber,
+                   Double scholarship, String formOfTraining) {
         super(name, surname, patronymic, phoneNumber, email, password, accountCode);
         this.numberOfGroup = group;
         this.studentNumber = studentNumber;
         this.scholarship = scholarship;
+        this.formOfTraining = formOfTraining;
         role = Role.STUDENT;
+    }
+
+    public void setScholarship(Double scholarship) {
+        this.scholarship = scholarship;
+    }
+
+    public void setFormOfTraining(String formOfTraining) {
+        this.formOfTraining = formOfTraining;
+    }
+
+    public Double getScholarship() {
+        return scholarship;
+    }
+
+    public String getFormOfTraining() {
+        return formOfTraining;
     }
 
     public Integer getStudentNumber() {

@@ -10,14 +10,21 @@ ${student.name}
 &nbsp;${student.surname}
 &nbsp;${student.patronymic}
 
+<p>Семестр: ${semester}</p>
+
 <form action="<c:url value="/MyServlet"/>" method="get">
     <div class = "ExaminGrade">
         <select id = "sel1" name = "gradeSelect1">
         <c:forEach var="subject" items="${requestScope.subjects}">
             <option><c:out value="${subject.name}"/></option>
         </c:forEach>
+            <option>-</option>
         </select>
-        <input type="text" name="grade1">
+        <select name="grade1">
+            <c:forEach var = "number" begin="0" end="10">
+                <option>${number}</option>
+            </c:forEach>
+        </select>
     </div>
 
     <div class = "ExaminGrade">
@@ -25,8 +32,13 @@ ${student.name}
             <c:forEach var="subject" items="${requestScope.subjects}">
                 <option><c:out value="${subject.name}"/></option>
             </c:forEach>
+            <option>-</option>
         </select>
-        <input type="text" name="grade2">
+        <select name="grade2">
+            <c:forEach var = "number" begin="0" end="10">
+                <option>${number}</option>
+            </c:forEach>
+        </select>
     </div>
 
     <div class = "ExaminGrade">
@@ -34,8 +46,13 @@ ${student.name}
             <c:forEach var="subject" items="${requestScope.subjects}">
                 <option><c:out value="${subject.name}"/></option>
             </c:forEach>
+            <option>-</option>
         </select>
-        <input type="text" name="grade3">
+        <select name="grade3">
+            <c:forEach var = "number" begin="0" end="10">
+                <option>${number}</option>
+            </c:forEach>
+        </select>
     </div>
 
     <div class = "ExaminGrade">
@@ -43,8 +60,13 @@ ${student.name}
             <c:forEach var="subject" items="${requestScope.subjects}">
                 <option><c:out value="${subject.name}"/></option>
             </c:forEach>
+            <option>-</option>
         </select>
-        <input type="text" name="grade4">
+        <select name="grade4">
+            <c:forEach var = "number" begin="0" end="10">
+                <option>${number}</option>
+            </c:forEach>
+        </select>
     </div>
 
     <div class = "ExaminGrade">
@@ -52,10 +74,18 @@ ${student.name}
             <c:forEach var="subject" items="${requestScope.subjects}">
                 <option><c:out value="${subject.name}"/></option>
             </c:forEach>
+            <option>-</option>
         </select>
-        <input type="text" name="grade5">
+        <select name="grade5">
+            <c:forEach var = "number" begin="0" end="10">
+                <option>${number}</option>
+            </c:forEach>
+        </select>
     </div>
+
+    <input type="hidden" name = "numberOfSemester" value="${semester}">
     <input type="hidden" name = "studentNumber" value= "${student.studentNumber}">
+    <input type="hidden" name = "formOfTraining" value= "${student.formOfTraining}">
     <input type="submit" name = "parameter" value = "рассчитать" class = "calculateButton">
 </form>
 </body>

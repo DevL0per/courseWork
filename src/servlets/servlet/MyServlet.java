@@ -53,7 +53,7 @@ public class MyServlet extends HttpServlet {
                 state.showStudentGradesScreen(req, resp);
                 break;
             case "рассчитать":
-                state.calculateScholarship(req, resp);
+                state.addStudentGrades(req, resp);
                 break;
             default:
                 req.getRequestDispatcher("index.jsp").forward(req, resp);

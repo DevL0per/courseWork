@@ -36,17 +36,19 @@ public class RegistrationServlet extends HttpServlet {
         final String number = req.getParameter("number");
         final String email = req.getParameter("email");
         final String password = req.getParameter("password");
+        final String formOfTraining = req.getParameter("formOfTraining");
 
         if (!isRequestNotEmpty(name, surname, patronymic,
                 studentNumber, faculty, group, number, email, password)) {
         }
 
         final Student student = new Student(name, surname, patronymic, number,
-                email, password, 1, Integer.valueOf(group), Integer.valueOf(studentNumber), 0.0);
+                email, password, 1, Integer.valueOf(group),
+                Integer.valueOf(studentNumber), 0.0, formOfTraining );
 
         userDAO = new UserDAO();
         userDAO.create(student);
-        req.getRequestDispatcher("/web/index.jsp").forward(req, resp);
+        req.getRequestDispatcher("/index.jsp").forward(req, resp);
     }
 
     private boolean isRequestNotEmpty(String name,String surname,String patronymic,String studentNumber,

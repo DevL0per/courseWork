@@ -76,6 +76,14 @@
             <input type = "password" name = "password" id = "in7"><br/>
         </div>
 
+        <div class = "field">
+            <label for = "in7">Форма обучения</label>
+            <select name="formOfTraining">
+                <option>бюджетная</option>
+                <option>платная</option>
+            </select>
+        </div>
+
         <input type="submit" value = "Регистрация" class = "registrationButton">
 
     </form>

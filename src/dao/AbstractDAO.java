@@ -6,16 +6,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Objects;
+import java.util.List;
 
-public abstract class AbstractController {
+public abstract class AbstractDAO {
     private Connection connection;
 
-    public AbstractController() {
+    public AbstractDAO() {
     }
 
-
-    public abstract <T> boolean update(T value, String tableName, String field);
+    public abstract List getAll();
+    public abstract <T> boolean update(int id, T value, String field);
     public abstract Object getEntityById(Integer id);
     public abstract boolean delete(Integer id);
     public abstract boolean create(Object entity);

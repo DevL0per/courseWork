@@ -28,6 +28,51 @@ public class UserDAO extends AbstractController {
 
     public UserDAO() { }
 
+    public <T> Subject getSubjectBy(String command, T value) {
+        Subject subject = null;
+        PreparedStatement statement = getPrepareStatement("SELECT * FROM Предмет" +
+                command );
+        try {
+            if (value instanceof Integer) {
+                statement.setInt(1, (Integer) value);
+            } else {
+                statement.setString(1, (String) value);
+            }
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Integer id = resultSet.getInt("КодПредмета");
+                String name = resultSet.getString("Название");
+                subject = new Subject(id, name);
+            }
+            closePrepareStatement(statement);
+        } catch (Exception exp) {
+            exp.printStackTrace();
+        }
+        return subject;
+    }
+
+    public List<StudentProgress> getStudentProgressById(Integer studentId) {
+        List<StudentProgress> list = new ArrayList<>();
+        PreparedStatement statement = getPrepareStatement("SELECT * FROM Успеваемость " +
+                "WHERE Студент_НомерСтудБилета = ?");
+        try {
+            statement.setInt(1, studentId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Integer markCode = resultSet.getInt("КодОценки");
+                Integer mark = resultSet.getInt("Оценка");
+                Integer subjectId = resultSet.getInt("Предмет_КодПредмета");
+                Integer numberOfSemester = resultSet.getInt("НомерСеместра");
+                StudentProgress studentProgress = new StudentProgress(markCode, mark, subjectId,
+                        studentId, numberOfSemester);
+                list.add(studentProgress);
+            }
+        } catch (Exception exp) {
+            exp.printStackTrace();
+        }
+        return list;
+    }
+
     public List<Subject> getAllSubjects() {
         List<Subject> list = new ArrayList<>();
         PreparedStatement statement = getPrepareStatement("SELECT * FROM Предмет");
@@ -47,7 +92,7 @@ public class UserDAO extends AbstractController {
 
     public void addStudentScholarshipById(Integer userId, Double scholarship) {
         PreparedStatement statement = getPrepareStatement("UPDATE Студент SET Стипендия = ?" +
-                " WHERE УчетнаяЗапись_КодУчетнойЗаписи = ?");
+                " WHERE НомерСтудБилета = ?");
         try {
             statement.setDouble(1, scholarship);
             statement.setInt(2, userId);
@@ -90,6 +135,7 @@ public class UserDAO extends AbstractController {
                 Integer accountCode = resultSet.getInt("УчетнаяЗапись_КодУчетнойЗаписи");
                 Integer numberOfGroup = resultSet.getInt("Группа_НомерГруппы");
                 Double scholarship = resultSet.getDouble("Стипендия");
+                String formOfTraining = resultSet.getString("ФормаОбучения");
 
                 statement2.setInt(1, accountCode);
                 ResultSet accountResult = statement2.executeQuery();
@@ -102,7 +148,8 @@ public class UserDAO extends AbstractController {
                     String email = accountResult.getString("Почта");
                     String password = accountResult.getString("Пароль");
                     Student student = new Student(name, surname, patronymic, number,
-                            email, password, accountCode, numberOfGroup, studentNumber, scholarship);
+                            email, password, accountCode, numberOfGroup, studentNumber,
+                            scholarship, formOfTraining);
                     list.add(student);
                 }
             }
@@ -288,10 +335,10 @@ public class UserDAO extends AbstractController {
         return null;
     }
 
-    public Object getStudentById(Integer id) {
+    public Object getStudentById(String command, Integer id) {
         Student student = null;
         PreparedStatement statement = getPrepareStatement("SELECT * FROM Студент " +
-                "WHERE УчетнаяЗапись_КодУчетнойЗаписи = ?" );
+                command);
         PreparedStatement statement2 = getPrepareStatement("SELECT * FROM УчетнаяЗапись " +
                 "WHERE КодУчетнойЗаписи = ?");
         try {
@@ -303,8 +350,9 @@ public class UserDAO extends AbstractController {
                 Integer accountCode = resultSet.getInt("УчетнаяЗапись_КодУчетнойЗаписи");
                 Integer numberOfGroup = resultSet.getInt("Группа_НомерГруппы");
                 Double scholarship = resultSet.getDouble("Стипендия");
+                String formOfTraining = resultSet.getString("ФормаОбучения");
 
-                statement2.setInt(1, id);
+                statement2.setInt(1, accountCode);
                 ResultSet accountResult = statement2.executeQuery();
 
                 while (accountResult.next()) {
@@ -315,7 +363,8 @@ public class UserDAO extends AbstractController {
                     String email = accountResult.getString("Почта");
                     String password = accountResult.getString("Пароль");
                     student = new Student(name, surname, patronymic, number,
-                            email, password, accountCode, numberOfGroup, studentNumber, scholarship);
+                            email, password, accountCode, numberOfGroup, studentNumber,
+                            scholarship, formOfTraining);
                 }
             }
         } catch (Exception exp) {
@@ -327,7 +376,7 @@ public class UserDAO extends AbstractController {
     public Integer getSubjectIdByName(String name) {
         Integer id = null;
         PreparedStatement statement = getPrepareStatement("SELECT * FROM Предмет" +
-                "WHERE Название = ?" );
+                " WHERE Название = ?" );
         try {
             statement.setString(1, name);
             ResultSet resultSet = statement.executeQuery();
@@ -390,66 +439,65 @@ public class UserDAO extends AbstractController {
 
     @Override
     public boolean create(Object entity) {
-        PreparedStatement statement2 = getPrepareStatement("SELECT * FROM УчетнаяЗапись WHERE Почта=?");
-        PreparedStatement userStatement = getPrepareStatement("INSERT INTO УчетнаяЗапись " +
+        PreparedStatement userStatement = getPrepareStatementWithLastSqlId("INSERT INTO УчетнаяЗапись " +
                 "(Имя, Фамилия, Отчество, Телефон, Почта, Пароль, Роль) values (?, ?, ?, ?, ?, ?, ?)");
         if (entity instanceof Student) {
             Student student = (Student) entity;
             PreparedStatement statement = getPrepareStatement("INSERT INTO Студент " +
-                    "(НомерСтудБилета, Группа_НомерГруппы, УчетнаяЗапись_КодУчетнойЗаписи) values (?, ?, ?)");
+                    "(НомерСтудБилета, Группа_НомерГруппы, УчетнаяЗапись_КодУчетнойЗаписи, ФормаОбучения)" +
+                    " values (?, ?, ?, ?)");
             try {
 
                 initializeUserStatement(userStatement, student);
                 userStatement.setString(7, "студент");
                 userStatement.executeUpdate();
 
-                statement2.setString(1, student.getEmail());
-                ResultSet resultSet =  statement2.executeQuery();
-                Integer accountCode = 0;
-
-                while (resultSet.next()) {
-                    accountCode = resultSet.getInt("КодУчетнойЗаписи");
+                ResultSet idResultSet = userStatement.getGeneratedKeys();
+                while (idResultSet.next()) {
+                    int accountCode = idResultSet.getInt(1);
+                    student.setAccountCode(accountCode);
                     break;
                 }
-
-                student.setAccountCode(accountCode);
 
                 statement.setInt(1, student.getStudentNumber());
                 statement.setInt(2, student.getNumberOfGroup());
                 statement.setInt(3, student.getAccountCode());
+                statement.setString(4, student.getFormOfTraining());
 
                 statement.executeUpdate();
-            } catch (SQLException exp) {
-                exp.printStackTrace();
-            }
-        } else {
-            Accountant accountant = (Accountant) entity;
-            PreparedStatement statement = getPrepareStatement("INSERT INTO Бухгалтер " +
-                    "(УчетнаяЗапись_КодУчетнойЗаписи) values (?)");
-            try {
-                initializeUserStatement(userStatement, accountant);
-                userStatement.setString(7, "бухгалтер");
-                userStatement.executeUpdate();
-
-                statement2.setString(1, accountant.getEmail());
-                ResultSet resultSet =  statement2.executeQuery();
-                Integer accountCode = 0;
-
-                while (resultSet.next()) {
-                    accountCode = resultSet.getInt("КодУчетнойЗаписи");
-                    break;
-                }
-
-                accountant.setAccountCode(accountCode);
-                statement.setInt(1, accountCode);
-                statement.executeUpdate();
-
             } catch (SQLException exp) {
                 exp.printStackTrace();
             }
         }
         return true;
     }
+//        } else {
+//            Accountant accountant = (Accountant) entity;
+//            PreparedStatement statement = getPrepareStatement("INSERT INTO Бухгалтер " +
+//                    "(УчетнаяЗапись_КодУчетнойЗаписи) values (?)");
+//            try {
+//                initializeUserStatement(userStatement, accountant);
+//                userStatement.setString(7, "бухгалтер");
+//                userStatement.executeUpdate();
+//
+//                s.setString(1, accountant.getEmail());
+//                ResultSet resultSet =  statement2.executeQuery();
+//                Integer accountCode = 0;
+//
+//                while (resultSet.next()) {
+//                    accountCode = resultSet.getInt("КодУчетнойЗаписи");
+//                    break;
+//                }
+//
+//                accountant.setAccountCode(accountCode);
+//                statement.setInt(1, accountCode);
+//                statement.executeUpdate();
+//
+//            } catch (SQLException exp) {
+//                exp.printStackTrace();
+//            }
+//        }
+//        return true;
 
     public void initializeUserStatement(PreparedStatement statement, AbstractUser user) {
         try {

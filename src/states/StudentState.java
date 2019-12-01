@@ -2,9 +2,7 @@ package states;
 
 import dao.UserDAO;
 import model.Student;
-import model.university.Faculty;
-import model.university.Group;
-import model.university.Specialty;
+import model.university.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +19,8 @@ public class StudentState implements State {
     List<Specialty> specialties = new CopyOnWriteArrayList<>();
     List<Faculty> faculties = new CopyOnWriteArrayList<>();
     List<Student> students = new CopyOnWriteArrayList<>();
+    List<StudentProgress> studentProgresses = new CopyOnWriteArrayList<>();
+    List<Subject> subjects = new CopyOnWriteArrayList<>();
 
     @Override
     public void doRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -34,14 +34,26 @@ public class StudentState implements State {
 
         Integer id = userDAO.getIdByAccountIdByLoginAndPassword(login, password);
 
-        Student student = (Student) userDAO.getStudentById(id);
+        Student student = (Student) userDAO.getStudentById("WHERE УчетнаяЗапись_КодУчетнойЗаписи = ?", id);
         Group group = userDAO.getGroupById(student.getNumberOfGroup());
         Specialty specialty = userDAO.getSpecialtyById(group.getSpecialtyId());
-
+        studentProgresses = userDAO.getStudentProgressById(student.getStudentNumber());
+        if (studentProgresses.isEmpty()) {
+            request.setAttribute("subjects", null);
+        } else {
+            for (int number = 0; number < studentProgresses.size(); number++) {
+                Integer subjectId = studentProgresses.get(number).getNumberOfSubject();
+                Subject subject = userDAO.getSubjectBy( " WHERE КодПредмета = ?", subjectId);
+                subjects.add(subject);
+            }
+            request.setAttribute("subjects", subjects);
+            request.setAttribute("studentProgresses", studentProgresses);
+        }
 
         request.setAttribute("specialty", specialty);
         request.setAttribute("group", group);
         request.setAttribute("student", student);
+        request.setAttribute("scholarship", student.getScholarship());
 
         try {
             request.getRequestDispatcher("/WEB-INF/view/html/studentAccount.jsp").forward(request, response);

@@ -27,16 +27,25 @@
     <p>курс: ${group.course}</p>
     <p>специальности: ${specialty.name}</p>
     <p>успеваемость: </p>
+    <%if (request.getAttribute("subjects") != null){ %>
     <table border="1" width="100%" cellpadding="5">
         <tr>
-            <th>Математика</th>
-            <th>Физика</th>
+<c:forEach var="subject" items="${requestScope.subjects}">
+            <th><c:out value="${subject.name}"/></th>
+</c:forEach>
         </tr>
         <tr>
-            <td>3</td>
-            <td>5</td>
+<c:forEach var="studentProgress" items="${requestScope.studentProgresses}">
+            <td>
+                <c:out value="${studentProgress.grade}"/>
+            </td>
+</c:forEach>
         </tr>
     </table>
+    <%} else {%>
+    Оценки не выставлены
+    <%}%>
+    <p>Стипендия ${student.scholarship}</p>
 </div>
 </body>
 </html>

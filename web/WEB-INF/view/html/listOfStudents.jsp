@@ -12,7 +12,7 @@
 <c:forEach var="student" items="${requestScope.students}">
     <form action="<c:url value="/MyServlet"/>" method="get" class = "listForm">
         <input type="hidden" name="parameter" value="ввод оценок">
-        <input type="hidden" name="studentId" value="<c:out value="${student.accountCode}"/>">
+        <input type="hidden" name="studentId" value="<c:out value="${student.studentNumber}"/>">
         <input type="submit" name = "studentName" value="<c:out value="${student.name}"/>">
     </form>
 </c:forEach>
