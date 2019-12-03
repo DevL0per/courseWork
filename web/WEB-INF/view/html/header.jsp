@@ -8,6 +8,13 @@
 </head>
 <body>
 <nav>
+    <div class = "title">
+        <h3>белорусский</h3>
+        <h3>государственный</h3>
+        <h3>университет</h3>
+        <h4>информатики</h4>
+        <h4>и радиоэлектроники </h4>
+    </div>
     <ul>
         <%if(session.getAttribute("role") == Role.UNKNOWN || session.getAttribute("role") == null) {%>
         <form action="<c:url value="/MyServlet"/>" method="get">

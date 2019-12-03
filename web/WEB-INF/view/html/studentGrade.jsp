@@ -12,6 +12,10 @@ ${student.name}
 
 <p>Семестр: ${semester}</p>
 
+<%if(request.getAttribute("error") != null) {%>
+${error}
+<%} else {%>
+
 <form action="<c:url value="/MyServlet"/>" method="get">
     <div class = "ExaminGrade">
         <select id = "sel1" name = "gradeSelect1">
@@ -87,6 +91,7 @@ ${student.name}
     <input type="hidden" name = "studentNumber" value= "${student.studentNumber}">
     <input type="hidden" name = "formOfTraining" value= "${student.formOfTraining}">
     <input type="submit" name = "parameter" value = "рассчитать" class = "calculateButton">
+    <%}%>
 </form>
 </body>
 </html>

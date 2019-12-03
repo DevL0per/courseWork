@@ -1,4 +1,6 @@
-
+<%@ page import="model.university.Subject" %>
+<%@ page import="java.util.List" %>
+<%@ page import="model.university.StudentProgress" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -16,6 +18,16 @@
     <img src="https://elysator.com/wp-content/uploads/blank-profile-picture-973460_1280-e1523978675847.png" alt="Письма мастера дзен">
 </div>
 
+<form action="<c:url value="/MyServlet"/>" method="get">
+    <input type="hidden" name="studentId" value="${student.studentNumber}">
+    <p><input type="submit" name="parameter" value="редактировать аккаунт"></p>
+</form>
+
+<form action="<c:url value="/MyServlet"/>" method="get" >
+    <input type="hidden" name = "studentId" value="${student.studentNumber}">
+    <input type="submit" name="parameter" value="показать статистику">
+</form>
+
 <div class = "mainInfo">
     <p>Фио: ${student.name} ${student.surname} ${student.patronymic}</p>
     <br>
@@ -30,22 +42,26 @@
     <%if (request.getAttribute("subjects") != null){ %>
     <table border="1" width="100%" cellpadding="5">
         <tr>
-<c:forEach var="subject" items="${requestScope.subjects}">
-            <th><c:out value="${subject.name}"/></th>
-</c:forEach>
+            <th>Семестр</th>
+            <th>Предмет</th>
+            <th>Оценка</th>
         </tr>
+        <%List<Subject> subjects = (List) request.getAttribute("subjects");%>
+        <%List<StudentProgress> studentProgress = (List) request.getAttribute("studentProgresses");%>
+
+<%for (int number = 0; number < studentProgress.size(); number++){%>
         <tr>
-<c:forEach var="studentProgress" items="${requestScope.studentProgresses}">
-            <td>
-                <c:out value="${studentProgress.grade}"/>
-            </td>
-</c:forEach>
+            <td><%=studentProgress.get(number).getNumberOfSemester()%></td>
+            <td><%=subjects.get(number).getName()%></td>
+            <td><%=studentProgress.get(number).getGrade()%></td>
         </tr>
+        <%}%>
     </table>
     <%} else {%>
     Оценки не выставлены
     <%}%>
     <p>Стипендия ${student.scholarship}</p>
+    <p>Осталось балл до повышения стипендии: ${averageBallToNextScholarship}</p>
 </div>
 </body>
 </html>

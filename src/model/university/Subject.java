@@ -1,6 +1,8 @@
 package model.university;
 
-public class Subject {
+import java.util.Comparator;
+
+public class Subject implements Comparable<Subject> {
     private Integer numberOfSubject;
     private String name;
 
@@ -23,5 +25,16 @@ public class Subject {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public int compareTo(Subject subject) {
+        if (this.getName().equals(subject.getName())) {
+            return 0;
+        } else if (this.getName().charAt(0) < (subject.getName().charAt(0))) {
+            return -1;
+        } else {
+            return 1;
+        }
     }
 }

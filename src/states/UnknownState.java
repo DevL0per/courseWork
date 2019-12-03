@@ -20,6 +20,11 @@ public class UnknownState implements State {
     List<Faculty> faculties = new CopyOnWriteArrayList<>();
 
     @Override
+    public void showStatistic(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(405);
+    }
+
+    @Override
     public void doRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         UserDAO userDAO = new UserDAO();
@@ -95,6 +100,31 @@ public class UnknownState implements State {
     }
 
     @Override
+    public void editStudentGrades(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(405);
+    }
+
+    @Override
+    public void editAccount(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(405);
+    }
+
+    @Override
     public void showStudentGradesScreen(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    }
+
+    @Override
+    public void addSpecialty(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(405);
+    }
+
+    @Override
+    public void addGroup(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(405);
+    }
+
+    @Override
+    public void addFaculty(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(405);
     }
 }

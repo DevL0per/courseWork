@@ -1,5 +1,6 @@
 package servlets.servlet;
 
+import dao.StudentDao;
 import dao.UserDAO;
 import model.Student;
 
@@ -13,7 +14,7 @@ import java.io.IOException;
 @WebServlet("/registrationServlet")
 public class RegistrationServlet extends HttpServlet {
 
-    private UserDAO userDAO;
+    private StudentDao studentDao;
 
     @Override
     public void init() throws ServletException {
@@ -46,8 +47,8 @@ public class RegistrationServlet extends HttpServlet {
                 email, password, 1, Integer.valueOf(group),
                 Integer.valueOf(studentNumber), 0.0, formOfTraining );
 
-        userDAO = new UserDAO();
-        userDAO.create(student);
+        studentDao = new StudentDao();
+        studentDao.create(student);
         req.getRequestDispatcher("/index.jsp").forward(req, resp);
     }
 

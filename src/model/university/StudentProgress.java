@@ -1,6 +1,6 @@
 package model.university;
 
-public class StudentProgress {
+public class StudentProgress implements Comparable<StudentProgress> {
     private Integer numberOfGrade;
     private Integer grade;
     private Integer numberOfSemester;
@@ -14,6 +14,14 @@ public class StudentProgress {
         this.numberOfSemester = numberOfSemester;
         this.numberOfSubject = numberOfSubject;
         this.numberOfStudent = numberOfStudent;
+    }
+
+    public Integer getNumberOfSemester() {
+        return numberOfSemester;
+    }
+
+    public void setNumberOfSemester(Integer numberOfSemester) {
+        this.numberOfSemester = numberOfSemester;
     }
 
     public void setNumberOfStudent(Integer numberOfStudent) {
@@ -46,5 +54,10 @@ public class StudentProgress {
 
     public void setNumberOfSubject(Integer numberOfSubject) {
         this.numberOfSubject = numberOfSubject;
+    }
+
+    @Override
+    public int compareTo(StudentProgress studentProgress) {
+        return (this.getNumberOfSemester() - studentProgress.getNumberOfSemester());
     }
 }

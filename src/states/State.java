@@ -7,6 +7,8 @@ import java.io.IOException;
 
 public interface State {
 
+    void showStatistic(HttpServletRequest request, HttpServletResponse response) throws IOException;
+
     void doRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
     void gotoCabinet(HttpServletRequest request, HttpServletResponse response) throws IOException;
@@ -31,7 +33,17 @@ public interface State {
 
     void goToStudentProfile(HttpServletRequest request, HttpServletResponse response, Integer profileId) throws IOException;
 
+    void editStudentGrades(HttpServletRequest request, HttpServletResponse response) throws IOException;
+
+    void editAccount(HttpServletRequest request, HttpServletResponse response) throws IOException;
+
     void showStudentGradesScreen(HttpServletRequest request, HttpServletResponse response) throws IOException;
+
+    void addSpecialty(HttpServletRequest request, HttpServletResponse response) throws IOException;
+
+    void addGroup(HttpServletRequest request, HttpServletResponse response) throws IOException;
+
+    void addFaculty(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
     default void removeUserAttributes(HttpServletRequest request, HttpServletResponse response) {
         request.removeAttribute("login");

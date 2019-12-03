@@ -11,11 +11,18 @@
 Специальности
 <hr/>
 <c:forEach var="specialty" items="${requestScope.specialties}">
+    <p>
     <form action="<c:url value="/MyServlet"/>" method="get" class = "listForm">
         <input type="hidden" name="parameter" value="показать группы специальности">
         <input type="hidden" name="specialtyId" value="<c:out value="${specialty.id}"/>">
         <input type="submit" name = "specialty" value="<c:out value="${specialty.name}"/>">
     </form>
+
+    <form>
+        <input type="hidden" name="specialtyId" value="<c:out value="${specialty.id}"/>">
+        <input type="submit" name="parameter" value="добавить группу">
+    </form>
+    </p>
 </c:forEach>
 </body>
 </html>

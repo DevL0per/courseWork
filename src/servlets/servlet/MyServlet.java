@@ -49,11 +49,29 @@ public class MyServlet extends HttpServlet {
                 Integer groupId = Integer.valueOf(req.getParameter("group"));
                 state.showAllStudentsInGroup(req, resp, groupId);
                 break;
-            case "ввод оценок":
+            case "выставить оценоки":
                 state.showStudentGradesScreen(req, resp);
+                break;
+            case "редактировать оценки":
+                state.editStudentGrades(req, resp);
+                break;
+            case "редактировать аккаунт":
+                state.editAccount(req, resp);
                 break;
             case "рассчитать":
                 state.addStudentGrades(req, resp);
+                break;
+            case "добавить факультет":
+                state.addFaculty(req, resp);
+                break;
+            case "добавить специальность":
+                state.addSpecialty(req, resp);
+                break;
+            case "добавить группу":
+                state.addGroup(req, resp);
+                break;
+            case "показать статистику":
+                state.showStatistic(req, resp);
                 break;
             default:
                 req.getRequestDispatcher("index.jsp").forward(req, resp);

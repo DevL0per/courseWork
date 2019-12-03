@@ -14,7 +14,7 @@ public abstract class AbstractDAO {
     public AbstractDAO() {
     }
 
-    public abstract List getAll();
+    public abstract <T> List getAllWhere(String sql, T value);
     public abstract <T> boolean update(int id, T value, String field);
     public abstract Object getEntityById(Integer id);
     public abstract boolean delete(Integer id);
