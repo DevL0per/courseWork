@@ -1,14 +1,18 @@
 package dao;
 
 import model.Role;
+import model.university.Faculty;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AccountDAO extends AbstractDAO {
 
     private final String UPDATE_ACCOUNT = "UPDATE УчетнаяЗапись SET ";
+    private final String GET_ALL_ACCOUNT_ID = "SELECT * FROM УчетнаяЗапись";
 
     public Integer getIdByAccountIdByLoginAndPassword(String login, String password) {
         PreparedStatement statement = getPrepareStatement("SELECT * FROM УчетнаяЗапись WHERE Почта= ? AND Пароль=?");
@@ -52,10 +56,13 @@ public class AccountDAO extends AbstractDAO {
             statement.setString(2, password);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                if (resultSet.getString("Роль").equals("студент")) {
+                String stringRole = resultSet.getString("Роль");
+                if (stringRole.equals("студент")) {
                     role = Role.STUDENT;
-                } else {
+                } else if (stringRole.equals("бухгалтер")) {
                     role = Role.ACCOUNTANT;
+                } else {
+                    role = Role.BANNED;
                 }
                 break;
             }
@@ -67,7 +74,21 @@ public class AccountDAO extends AbstractDAO {
 
     @Override
     public <T> List getAllWhere(String sql, T value) {
-        return null;
+        List<Integer> list = new ArrayList<>();
+        PreparedStatement statement = getPrepareStatement(GET_ALL_ACCOUNT_ID + " " + sql + " AND Роль = \'студент\'");
+        try {
+            if (!sql.isEmpty()) {
+                statement.setObject(1, "%" + value + "%");
+            }
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Integer id = resultSet.getInt("КодУчетнойЗаписи");
+                list.add(id);
+            }
+        } catch (SQLException exp) {
+            exp.printStackTrace();
+        }
+        return list;
     }
 
     @Override

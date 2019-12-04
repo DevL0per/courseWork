@@ -46,8 +46,11 @@ public class MyServlet extends HttpServlet {
                 state.doLogout(req, resp);
                 break;
             case "список студентов":
-                Integer groupId = Integer.valueOf(req.getParameter("group"));
-                state.showAllStudentsInGroup(req, resp, groupId);
+                state.showAllStudentsInGroup(req, resp);
+                break;
+            case "заблокировать студента":
+            case "разблокировать студента":
+                state.banAccount(req, resp);
                 break;
             case "выставить оценоки":
                 state.showStudentGradesScreen(req, resp);

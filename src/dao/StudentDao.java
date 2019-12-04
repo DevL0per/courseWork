@@ -1,6 +1,7 @@
 package dao;
 
 import model.AbstractUser;
+import model.Role;
 import model.Student;
 
 import java.sql.PreparedStatement;
@@ -51,9 +52,16 @@ public class StudentDao extends AbstractDAO {
                     String number = accountResult.getString("Телефон");
                     String email = accountResult.getString("Почта");
                     String password = accountResult.getString("Пароль");
+                    String stringRole = accountResult.getString("Роль");
+                    Role role;
+                    if (stringRole.equals("студент")) {
+                        role = Role.STUDENT;
+                    } else {
+                        role = Role.BANNED;
+                    }
                     Student student = new Student(name, surname, patronymic, number,
                             email, password, accountCode, numberOfGroup, studentNumber,
-                            scholarship, formOfTraining);
+                            scholarship, formOfTraining, role);
                     list.add(student);
                 }
             }
@@ -105,9 +113,16 @@ public class StudentDao extends AbstractDAO {
                     String number = accountResult.getString("Телефон");
                     String email = accountResult.getString("Почта");
                     String password = accountResult.getString("Пароль");
+                    String stringRole = accountResult.getString("Роль");
+                    Role role;
+                    if (stringRole.equals("студент")) {
+                        role = Role.STUDENT;
+                    } else {
+                        role = Role.BANNED;
+                    }
                     student = new Student(name, surname, patronymic, number,
                             email, password, accountCode, numberOfGroup, studentNumber,
-                            scholarship, formOfTraining);
+                            scholarship, formOfTraining, role);
                 }
             }
         } catch (Exception exp) {

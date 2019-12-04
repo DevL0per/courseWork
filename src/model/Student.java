@@ -11,13 +11,13 @@ public class Student extends AbstractUser {
     public Student(String name, String surname, String patronymic,
                    String phoneNumber, String email, String password,
                    Integer accountCode, Integer group, Integer studentNumber,
-                   Double scholarship, String formOfTraining) {
+                   Double scholarship, String formOfTraining, Role role) {
         super(name, surname, patronymic, phoneNumber, email, password, accountCode);
         this.numberOfGroup = group;
         this.studentNumber = studentNumber;
         this.scholarship = scholarship;
         this.formOfTraining = formOfTraining;
-        role = Role.STUDENT;
+        this.role = role;
     }
 
     public void setScholarship(Double scholarship) {

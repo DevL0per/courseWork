@@ -1,6 +1,6 @@
 .listForm input[type=submit] {
     margin: 5px 10px;
-    width: 140px;
+    width: 150px;
     float: left;
 }
 
@@ -21,4 +21,25 @@
 
 .listForm p {
     margin: 10px 0px 0px 5px;
+}
+
+.searchStudentsForm {
+    width: 300px;
+    height: 100px;
+    margin: 10px auto 10px auto;
+    text-align: center;
+}
+
+.searchStudentsForm input[type='text'] {
+    width: 300px;
+    height: 30px;
+    font-size: 15px;
+}
+
+.searchStudentsForm input[type='submit'] {
+    width: 150px;
+    height: 30px;
+    background-color: #012362;
+    color: #d7dee2;
+    margin-top: 5px;
 }

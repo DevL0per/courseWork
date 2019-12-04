@@ -182,8 +182,7 @@ public class StudentState implements State {
     @Override
     public void showAllFaculties(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (!nonNull(request.getAttribute("faculties"))) {
-            UserDAO userDAO = new UserDAO();
-            faculties = userDAO.getAllFaculty();
+            faculties = facultyDAO.getAllWhere("", 0);
             request.setAttribute("faculties", faculties);
         }
         try {
@@ -196,8 +195,7 @@ public class StudentState implements State {
     @Override
     public void showAllSpecialtyInFaculty(HttpServletRequest request, HttpServletResponse response, Integer facultyId) throws IOException {
         if (!nonNull(request.getAttribute("specialties"))) {
-            UserDAO userDAO = new UserDAO();
-            specialties = userDAO.getAllSpecialtyInFaculty(facultyId);
+            specialties = specialtyDAO.getAllSpecialtyInFaculty(facultyId);
             request.setAttribute("specialties", specialties);
         }
         try {
@@ -210,8 +208,7 @@ public class StudentState implements State {
     @Override
     public void showAllGroupsInSpecialty(HttpServletRequest request, HttpServletResponse response, Integer specialtyId) throws IOException {
         if (!nonNull(request.getAttribute("groups"))) {
-            UserDAO userDAO = new UserDAO();
-            groups = userDAO.getAllGroupInSpecialty(specialtyId);
+            groups = groupDAO.getAllGroupInSpecialty(specialtyId);
             request.setAttribute("groups", groups);
         }
         try {
@@ -222,7 +219,8 @@ public class StudentState implements State {
     }
 
     @Override
-    public void showAllStudentsInGroup(HttpServletRequest request, HttpServletResponse response, Integer groupId) throws IOException {
+    public void showAllStudentsInGroup(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Integer groupId = Integer.valueOf(request.getParameter("group"));
         if (!nonNull(request.getAttribute("students"))) {
             students = studentDao.getAllWhere("WHERE Группа_НомерГруппы = ?", groupId);
             request.setAttribute("students", students);
@@ -315,6 +313,11 @@ public class StudentState implements State {
 
     @Override
     public void addFaculty(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(405);
+    }
+
+    @Override
+    public void banAccount(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendError(405);
     }
 

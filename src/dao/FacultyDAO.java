@@ -16,7 +16,7 @@ public class FacultyDAO extends AbstractDAO {
     @Override
     public <T> List getAllWhere(String sql, T value) {
         List<Faculty> list = new ArrayList<>();
-        PreparedStatement statement = getPrepareStatement(GET_ALL_FACULTY + sql);
+        PreparedStatement statement = getPrepareStatement(GET_ALL_FACULTY + " " + sql);
         try {
             if (!sql.isEmpty()) {
                 statement.setObject(1, value);

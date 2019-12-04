@@ -3,5 +3,6 @@ package model;
 public enum Role {
     STUDENT,
     ACCOUNTANT,
-    UNKNOWN;
+    UNKNOWN,
+    BANNED;
 }

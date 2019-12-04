@@ -1,6 +1,7 @@
 package states;
 
 import dao.*;
+import model.Role;
 import model.Student;
 import model.university.*;
 
@@ -15,6 +16,7 @@ import static java.util.Objects.nonNull;
 
 public class AccountantState implements State {
 
+    AccountDAO accountDAO = new AccountDAO();
     SubjectDAO subjectDAO = new SubjectDAO();
     StudentDao studentDao = new StudentDao();
     GroupDAO groupDAO = new GroupDAO();
@@ -133,7 +135,6 @@ public class AccountantState implements State {
     @Override
     public void showAllFaculties(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (!nonNull(request.getAttribute("faculties"))) {
-            UserDAO userDAO = new UserDAO();
             faculties = facultyDAO.getAllWhere("", 0);
             request.setAttribute("faculties", faculties);
         }
@@ -147,7 +148,6 @@ public class AccountantState implements State {
     @Override
     public void showAllSpecialtyInFaculty(HttpServletRequest request, HttpServletResponse response, Integer facultyId) throws IOException {
         if (!nonNull(request.getAttribute("specialties"))) {
-            UserDAO userDAO = new UserDAO();
             specialties = specialtyDAO.getAllSpecialtyInFaculty(facultyId);
             request.setAttribute("specialties", specialties);
         }
@@ -161,7 +161,6 @@ public class AccountantState implements State {
     @Override
     public void showAllGroupsInSpecialty(HttpServletRequest request, HttpServletResponse response, Integer specialtyId) throws IOException {
         if (!nonNull(request.getAttribute("groups"))) {
-            UserDAO userDAO = new UserDAO();
             groups = groupDAO.getAllGroupInSpecialty(specialtyId);
             request.setAttribute("groups", groups);
         }
@@ -173,15 +172,48 @@ public class AccountantState implements State {
     }
 
     @Override
-    public void showAllStudentsInGroup(HttpServletRequest request, HttpServletResponse response, Integer groupId) throws IOException {
-        if (!nonNull(request.getAttribute("students"))) {
+    public void showAllStudentsInGroup(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        Integer groupId = Integer.valueOf(request.getParameter("group"));
+        request.setAttribute("group", groupId);
+
+        if(request.getParameter("searchParameter") != null) {
+            String parameter = request.getParameter("searchParameter");
+            List<Student> students = new CopyOnWriteArrayList<>();
+            List<Integer> list = null;
+            String[] parameters = new String[] {"Имя", "Фамилия", "Отчество", "Телефон"};
+
+            for (int number = 0; number < parameters.length; number++) {
+                list = accountDAO.getAllWhere("WHERE " + parameters[number] + " LIKE ?", parameter);
+                if (!list.isEmpty()) {
+                    break;
+                }
+            }
+            if (!list.isEmpty()) {
+                for (int number = 0; number < list.size(); number++) {
+                    Integer accountId = list.get(number);
+                    Student student = (Student) studentDao.getAllWhere("WHERE УчетнаяЗапись_КодУчетнойЗаписи = ?",
+                            accountId).get(0);
+                    if (student.getNumberOfGroup().equals(groupId)) {
+                        students.add(student);
+                    }
+                }
+            }
+
+            request.setAttribute("students", students);
+            try {
+                request.getRequestDispatcher("/WEB-INF/view/html/accountantListOfStudents.jsp").forward(request, response);
+            } catch (Exception exp) {
+                exp.printStackTrace();
+            }
+        } else {
             students = studentDao.getAllWhere("WHERE Группа_НомерГруппы = ?", groupId);
             request.setAttribute("students", students);
-        }
-        try {
-            request.getRequestDispatcher("/WEB-INF/view/html/accountantListOfStudents.jsp").forward(request, response);
-        } catch (Exception exp) {
-            exp.printStackTrace();
+            try {
+                request.getRequestDispatcher("/WEB-INF/view/html/accountantListOfStudents.jsp").forward(request, response);
+            } catch (Exception exp) {
+                exp.printStackTrace();
+            }
         }
     }
 
@@ -329,6 +361,19 @@ public class AccountantState implements State {
                 exp.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void banAccount(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Integer studentNumber = Integer.valueOf(request.getParameter("studentId"));
+
+        Student student = (Student) studentDao.getEntityById(studentNumber);
+        if (student.getRole().equals(Role.STUDENT)) {
+            accountDAO.update(student.getAccountCode(), "заблокирован", "Роль");
+        } else {
+            accountDAO.update(student.getAccountCode(), "студент", "Роль");
+        }
+        showAllStudentsInGroup(request, response);
     }
 
     private int calculateSemester(int studentNumber) {

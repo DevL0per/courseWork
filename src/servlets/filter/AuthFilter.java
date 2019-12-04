@@ -1,7 +1,6 @@
 package servlets.filter;
 
 import dao.AccountDAO;
-import dao.UserDAO;
 import model.Role;
 import states.AccountantState;
 import states.State;
@@ -44,6 +43,9 @@ public class AuthFilter implements Filter {
         }
         else if (nonNull(login) && nonNull(password) && accountDAO.isUserExist(login, password)){
             final Role role = accountDAO.getRoleByLoginAndPassword(login, password);
+            if(role.equals(Role.BANNED)) {
+                resp.sendError(401);
+            }
             req.getSession().setAttribute("login", login);
             req.getSession().setAttribute("password", password);
             req.getSession().setAttribute("role", role);

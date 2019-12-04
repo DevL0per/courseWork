@@ -1,7 +1,7 @@
 package servlets.servlet;
 
 import dao.StudentDao;
-import dao.UserDAO;
+import model.Role;
 import model.Student;
 
 import javax.servlet.ServletException;
@@ -45,7 +45,7 @@ public class RegistrationServlet extends HttpServlet {
 
         final Student student = new Student(name, surname, patronymic, number,
                 email, password, 1, Integer.valueOf(group),
-                Integer.valueOf(studentNumber), 0.0, formOfTraining );
+                Integer.valueOf(studentNumber), 0.0, formOfTraining, Role.STUDENT);
 
         studentDao = new StudentDao();
         studentDao.create(student);

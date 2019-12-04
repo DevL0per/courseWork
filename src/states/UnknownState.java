@@ -1,6 +1,7 @@
 package states;
 
-import dao.UserDAO;
+import dao.FacultyDAO;
+import dao.GroupDAO;
 import model.university.Faculty;
 import model.university.Group;
 import model.university.Specialty;
@@ -19,6 +20,9 @@ public class UnknownState implements State {
     List<Specialty> specialties = new CopyOnWriteArrayList<>();
     List<Faculty> faculties = new CopyOnWriteArrayList<>();
 
+    FacultyDAO facultyDAO = new FacultyDAO();
+    GroupDAO groupDAO = new GroupDAO();
+
     @Override
     public void showStatistic(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendError(405);
@@ -27,9 +31,8 @@ public class UnknownState implements State {
     @Override
     public void doRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        UserDAO userDAO = new UserDAO();
-        faculties = userDAO.getAllFaculty();
-        groups = userDAO.getAllGroups();
+        faculties = facultyDAO.getAllWhere("", 0);
+        groups = groupDAO.getAllWhere("", 0);
 
         request.setAttribute("faculties", faculties);
         request.setAttribute("groups", groups);
@@ -90,7 +93,7 @@ public class UnknownState implements State {
     }
 
     @Override
-    public void showAllStudentsInGroup(HttpServletRequest request, HttpServletResponse response, Integer groupId) throws IOException {
+    public void showAllStudentsInGroup(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendError(405);
     }
 
@@ -125,6 +128,11 @@ public class UnknownState implements State {
 
     @Override
     public void addFaculty(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(405);
+    }
+
+    @Override
+    public void banAccount(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendError(405);
     }
 }

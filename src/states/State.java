@@ -33,7 +33,7 @@ public interface State {
 
     void showAllGroupsInSpecialty(HttpServletRequest request, HttpServletResponse response, Integer specialtyId) throws IOException;
 
-    void showAllStudentsInGroup(HttpServletRequest request, HttpServletResponse response, Integer groupId) throws IOException;
+    void showAllStudentsInGroup(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
     void goToStudentProfile(HttpServletRequest request, HttpServletResponse response, Integer profileId) throws IOException;
 
@@ -48,6 +48,8 @@ public interface State {
     void addGroup(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
     void addFaculty(HttpServletRequest request, HttpServletResponse response) throws IOException;
+
+    void banAccount(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
     default void removeUserAttributes(HttpServletRequest request, HttpServletResponse response) {
         request.removeAttribute("login");
