@@ -105,7 +105,7 @@ public class AccountantState implements State {
 
     private void calculateScholarship(HashMap<Integer, Integer> map, Integer userId) {
         Double scholarship = 77.08;
-        Integer averageMark = 0;
+        Double averageMark = 0.0;
         for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
             if (entry.getValue() < 4) {
                 scholarship = 0.0;
@@ -192,10 +192,12 @@ public class AccountantState implements State {
 
     @Override
     public void editStudentGrades(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        boolean flag = false;
         if (request.getParameter("gradeId") != null) {
             Integer id = Integer.valueOf(request.getParameter("gradeId"));
             Integer value = Integer.valueOf(request.getParameter("value"));
             studentProgressDAO.update(id, value, "Оценка");
+            flag = true;
         }
 
         Integer studentId;
@@ -234,8 +236,9 @@ public class AccountantState implements State {
         } catch (Exception exp) {
             exp.printStackTrace();
         }
-
-        calculateScholarship(gradesAndSubjectsMap, studentId);
+        if (flag) {
+            calculateScholarship(gradesAndSubjectsMap, studentId);
+        }
     }
 
     @Override

@@ -14,16 +14,17 @@
 </head>
 <body>
 <%@ include file="header.jsp"%>
+<br/>
 <div class = "profileImage">
     <img src="https://elysator.com/wp-content/uploads/blank-profile-picture-973460_1280-e1523978675847.png" alt="Письма мастера дзен">
 </div>
 
-<form action="<c:url value="/MyServlet"/>" method="get">
+<form action="<c:url value="/MyServlet"/>" method="get" class="studentAccountButton">
     <input type="hidden" name="studentId" value="${student.studentNumber}">
     <p><input type="submit" name="parameter" value="редактировать аккаунт"></p>
 </form>
 
-<form action="<c:url value="/MyServlet"/>" method="get" >
+<form action="<c:url value="/MyServlet"/>" method="get" class= "studentAccountButton">
     <input type="hidden" name = "studentId" value="${student.studentNumber}">
     <input type="submit" name="parameter" value="показать статистику">
 </form>

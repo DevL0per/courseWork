@@ -182,7 +182,7 @@ public class StudentDao extends AbstractDAO {
     }
 
     public void addStudentScholarshipById(Integer userId, Double scholarship) {
-        PreparedStatement statement = getPrepareStatement(CREATE_STUDENT);
+        PreparedStatement statement = getPrepareStatement(UPDATE_STUDENT + " Стипендия = ? WHERE НомерСтудБилета = ?");
         try {
             statement.setDouble(1, scholarship);
             statement.setInt(2, userId);

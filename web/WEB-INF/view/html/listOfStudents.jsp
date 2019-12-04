@@ -10,9 +10,9 @@
 Студенты
 <hr/>
 <c:forEach var="student" items="${requestScope.students}">
-    <form action="<c:url value="/MyServlet"/>" method="get" class = "listForm">
-        <p>"<c:out value="${student.name}"/></p>
-    </form>
+    <div class = "listForm">
+        <p><c:out value="${student.name}"/></p>
+    </div>
 </c:forEach>
 </body>
 </html>

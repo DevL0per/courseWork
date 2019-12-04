@@ -12,18 +12,18 @@
     <style><%@include file="/WEB-INF/view/css/loginStyle.css"%></style>
 </head>
 <body>
-    <%@ include file="header.jsp"%>
+<%@ include file="header.jsp"%>
 <div class="myClass">
+    <br/>
     <h1>Login</h1>
-    <form method="post" action="${pageContext.request.contextPath}/MyServlet">
+    <br/>
+    <hr/>
+    <form method="post" action="${pageContext.request.contextPath}/MyServlet" class="loginForm">
         <input type="text" required placeholder="email" name="login" class = "loginFieldClass">
         <br/>
         <input type="password" required placeholder="password" name="password" class = "loginFieldClass">
         <br/>
-        <input type="submit" value="Войти">
-    </form>
-    <form method="get" action="${pageContext.request.contextPath}/registrationServlet" class = "registrationButton">
-        <input type="submit" name = "button" value="Регистрация">
+        <input type="submit" value="Войти" class="loginFormButton">
     </form>
 </div>
 </body>

@@ -20,7 +20,7 @@
          <input type="hidden" name="facultyId" value="<c:out value="${faculty.id}"/>">
          <input type="submit" name = "faculty" value="<c:out value="${faculty.name}"/>">
      </form>
-     <form action="<c:url value="/MyServlet"/>" method="get" class = "listForm">
+     <form action="<c:url value="/MyServlet"/>" method="get" class = "listParameters">
          <input type="hidden" name="facultyId" value="<c:out value="${faculty.id}"/>">
          <input type="submit" name = "parameter" value="добавить специальность">
      </form>

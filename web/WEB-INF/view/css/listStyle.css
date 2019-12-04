@@ -1,5 +1,6 @@
-.listForm input {
+.listForm input[type=submit] {
     margin: 5px 10px;
+    width: 140px;
     float: left;
 }
 
@@ -11,4 +12,13 @@
     float: right;
     margin-right: 20px;
     margin-top: 5px;
+}
+
+.listParameters input[type=submit] {
+    margin: 5px 10px;
+    float: left;
+}
+
+.listForm p {
+    margin: 10px 0px 0px 5px;
 }

@@ -73,6 +73,9 @@ public class MyServlet extends HttpServlet {
             case "показать статистику":
                 state.showStatistic(req, resp);
                 break;
+            case "расписание":
+                state.showSchedule(req, resp);
+                break;
             default:
                 req.getRequestDispatcher("index.jsp").forward(req, resp);
                 break;

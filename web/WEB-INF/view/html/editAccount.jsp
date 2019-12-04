@@ -14,6 +14,9 @@
 <body>
 
 <%@ include file="header.jsp"%>
+<br/>
+Редактирование аккауна
+<hr>
 
 <div class = "window">
     <form action="<c:url value="/MyServlet"/>" method="get">
@@ -48,22 +51,9 @@
             <input type = "password" name = "newPassword" id = "in7" value="${student.password}"><br/>
         </div>
 
-        <input type = "submit" name="parameter" value = "редактировать аккаунт" class = "registrationButton/">
+        <input type = "submit" name="parameter" value = "редактировать аккаунт" class = "registrationButton">
 
     </form>
-
-<%--<form action="<c:url value="/MyServlet"/>" method="get">--%>
-<%--    <input type="text" name="newName" value="${student.name}">--%>
-<%--    <input type="text" name="newSurname" value="${student.surname}">--%>
-<%--    <input type="text" name="newPatronymic" value="${student.patronymic}">--%>
-<%--    <input type="text" name="newPhoneNumber" value="${student.phoneNumber}">--%>
-<%--    <input type="text" name="newEmail" value="${student.email}">--%>
-<%--    <input type="password" name="newPassword" value="${student.password}">--%>
-<%--    --%>
-<%--    --%>
-<%--    <c:forEach var="group" items="${requestScope.groups}">--%>
-<%--        <option><c:out value="${group.numberOfGroup}"/></option>--%>
-<%--    </c:forEach>--%>
-<%--</form>--%>
+    </div>
 </body>
 </html>

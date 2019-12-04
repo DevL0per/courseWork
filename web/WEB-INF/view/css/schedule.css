@@ -1,0 +1,45 @@
+.schedule {
+    margin: 0px auto auto;
+    width: 350px;
+    height: 250px;
+    text-align: left;
+    background-color: #d7dee2;;
+}
+
+.schedule div {
+    height: 20px;
+}
+
+.headerForSchedule {
+    width: 350px;
+    height: 30px;
+    text-align: center;
+    margin: 30px auto 0px auto;
+    background-color: #012362;
+    color: #d7dee2;
+}
+
+p {
+    font-size: 20px;
+}
+
+.scheduleForm input[type=text] {
+    width: 350px;
+    font-size: 15px;
+    height: 30px;
+}
+
+.scheduleForm input[type=button] {
+    margin-top: 10px;
+    width: 200px;
+    height: 30px;
+    background-color: #012362;
+    color: #d7dee2;
+}
+
+.scheduleForm {
+    text-align: center;
+    width: 350px;
+    height: 100px;
+    margin: 50px auto 0px auto;
+}

@@ -8,12 +8,11 @@
 </head>
 <body>
 <nav>
+    <img src="https://www.bsuir.by/m/12_100229_1_91911.png" alt="BSUIR_LOGO" class = "logo">
     <div class = "title">
-        <h3>белорусский</h3>
-        <h3>государственный</h3>
-        <h3>университет</h3>
-        <h4>информатики</h4>
-        <h4>и радиоэлектроники </h4>
+        <h3>белорусский государственный</h3>
+        <h3>университет информатики</h3>
+        <h3>и радиоэлектроники</h3>
     </div>
     <ul>
         <%if(session.getAttribute("role") == Role.UNKNOWN || session.getAttribute("role") == null) {%>
@@ -33,6 +32,9 @@
         <%}%>
         <form action="<c:url value="/MyServlet"/>" method="get">
             <li> <input type = "submit" name = "parameter" value="регистрация"> </li>
+        </form>
+        <form action="<c:url value="/MyServlet"/>" method="get">
+            <li> <input type = "submit" name = "parameter" value="расписание"> </li>
         </form>
     </ul>
 </nav>

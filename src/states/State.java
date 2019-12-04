@@ -1,11 +1,15 @@
 package states;
 
 
+import dao.GroupDAO;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public interface State {
+
+    GroupDAO groupDao = new GroupDAO();
 
     void showStatistic(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
@@ -53,4 +57,13 @@ public interface State {
         request.getSession().removeAttribute("password");
         request.getSession().removeAttribute("role");
     }
+
+    default void showSchedule(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            request.getRequestDispatcher("/WEB-INF/view/html/json.jsp").forward(request, response);
+        } catch (Exception exp) {
+            exp.printStackTrace();
+        }
+    }
+
 }
