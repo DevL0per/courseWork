@@ -16,7 +16,7 @@
 <body>
 <%@ include file="header.jsp"%>
 <br/>
- Регистрация
+ <div class="pageTitle"><p>Регистрация</p></div>
 <hr/>
 <div class = "window">
     <form action="<c:url value="/registrationServlet"/>" method="post">

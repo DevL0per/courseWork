@@ -1,8 +1,16 @@
 package dao;
 
-public class AccoutantDAO extends AbstractController {
+import java.util.List;
+
+public class AccoutantDAO extends AbstractDAO {
+
     @Override
-    public <T> boolean update(T value, String tableName, String field) {
+    public <T> List getAllWhere(String sql, T value) {
+        return null;
+    }
+
+    @Override
+    public <T> boolean update(int id, T value, String field) {
         return false;
     }
 

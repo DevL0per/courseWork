@@ -63,4 +63,12 @@ nav ul li input {
     float: left;
 }
 
+.pageTitle {
+    width: 262px;
+    margin: 2px 0 2px 0;
+}
 
+.pageTitle p {
+    margin-left: 10px;
+    font-size: 20px;
+}

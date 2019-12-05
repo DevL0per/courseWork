@@ -1,16 +1,15 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: romanvaznik
-  Date: 04/12/2019
-  Time: 22:21
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Error401</title>
+    <style><%@include file="../css/errorPageStyle.css"%></style>
 </head>
 <body>
-Ваш Аккаунт был заблокирован
+<%@ include file="header.jsp"%>
+<br><br>
+<div class = "error">
+    <h1>ВАШ АККАУНТ БЫЛ ЗАБЛОКИРОВАН</h1>
+    <input type="button" onclick="history.back()" value="Назад"/>
+</div>
 </body>
 </html>

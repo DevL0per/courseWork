@@ -8,13 +8,14 @@
 <body>
 <%@ include file="header.jsp"%>
 <br/>
-Группы
+<div class="pageTitle"><p>Группы</p></div>
 <hr/>
 <c:forEach var="group" items="${requestScope.groups}">
     <form action="<c:url value="/MyServlet"/>" method="get" class = "listForm">
         <input type="hidden" name="parameter" value="список студентов">
         <input type="submit" name = "group" value="<c:out value="${group.numberOfGroup}"/>">
     </form>
+    <br/> <br/>
 </c:forEach>
 </body>
 </html>

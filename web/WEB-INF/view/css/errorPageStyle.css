@@ -1,0 +1,20 @@
+.error {
+    width: 500px;
+    height: 300px;
+    margin: 100px auto 0 auto;
+    text-align: center;
+}
+
+.error h1 {
+    color: darkred;
+    font-size: 50px;
+}
+
+.error input[type=button] {
+    margin-top: 20px;
+    font-size: 25px;
+    border: none;
+    width: 120px;
+    height: 30px;
+    background: none;
+}

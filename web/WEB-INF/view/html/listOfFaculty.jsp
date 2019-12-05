@@ -8,9 +8,9 @@
 <body>
  <%@ include file="header.jsp"%>
  <br/>
-  Факультеты
+ <div class="pageTitle"><p>Факультеты</p></div>
  <hr/>
- <form action="<c:url value="/MyServlet"/>" method="get" class = "addFacultyButton">
+ <form action="<c:url value="/MyServlet"/>" method="post" class = "addFacultyButton">
      <input type="submit" name = "parameter" value="добавить факультет">
  </form>
  <c:forEach var="faculty" items="${requestScope.faculties}">
@@ -24,7 +24,7 @@
          <input type="hidden" name="facultyId" value="<c:out value="${faculty.id}"/>">
          <input type="submit" name = "parameter" value="добавить специальность">
      </form>
-     <br/>
+     <br/> <br/>
      </p>
  </c:forEach>
 </body>

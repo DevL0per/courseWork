@@ -15,11 +15,11 @@
 
 <%@ include file="header.jsp"%>
 <br/>
-Редактирование аккауна
+<div class="pageTitle"><p>Редактирование аккаунта</p></div>
 <hr>
 
 <div class = "window">
-    <form action="<c:url value="/MyServlet"/>" method="get">
+    <form action="<c:url value="/MyServlet"/>" method="post">
 
         <div class = "field">
             <label for = "in1">Имя</label>

@@ -7,7 +7,7 @@
 <body>
 <%@ include file="header.jsp"%>
 <br/>
-Студенты
+<div class="pageTitle"><p>Студенты</p></div>
 <hr/>
 <c:forEach var="student" items="${requestScope.students}">
     <div class = "listForm">

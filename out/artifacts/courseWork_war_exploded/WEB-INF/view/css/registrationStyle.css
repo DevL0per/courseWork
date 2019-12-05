@@ -29,3 +29,15 @@ label {
     height: 23px;
 }
 
+
+.subjectName {
+    float: left;
+    width: 110px;
+}
+
+.editGradesForm {
+    width: 400px;
+    height: 400px;
+    text-align: left;
+    margin: 10px auto 10px auto;
+}

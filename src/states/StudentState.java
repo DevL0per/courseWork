@@ -57,7 +57,7 @@ public class StudentState implements State {
 
         request.setAttribute("gradesPerSemester", gradesPerSemester);
         try {
-            request.getRequestDispatcher("/WEB-INF/view/html/schedule.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/view/html/chart.jsp").forward(request, response);
         } catch (Exception exp) {
             exp.printStackTrace();
         }
@@ -73,9 +73,12 @@ public class StudentState implements State {
         String login = (String) request.getSession().getAttribute("login");
         String password = (String) request.getSession().getAttribute("password");
 
+        SortedMap<Subject, StudentProgress> studentProgressMap = new TreeMap<Subject, StudentProgress>();
+
         Integer id = accountDAO.getIdByAccountIdByLoginAndPassword(login, password);
 
         Student student = ((List<Student>) studentDao.getAllWhere("WHERE УчетнаяЗапись_КодУчетнойЗаписи = ?", id)).get(0);
+
         Group group = (Group) groupDAO.getEntityById(student.getNumberOfGroup());
         Specialty specialty = (Specialty) specialtyDAO.getEntityById(group.getSpecialtyId());
 
@@ -88,10 +91,9 @@ public class StudentState implements State {
             for (int number = 0; number < studentProgresses.size(); number++) {
                 Integer subjectId = studentProgresses.get(number).getNumberOfSubject();
                 Subject subject = (Subject) subjectDAO.getEntityById(subjectId);
-                subjects.add(subject);
+                studentProgressMap.put(subject, studentProgresses.get(number));
             }
-            request.setAttribute("subjects", subjects);
-            request.setAttribute("studentProgresses", studentProgresses);
+            request.setAttribute("studentProgresses", studentProgressMap);
             double averageBallToNextScholarship = calculateAverageBallToNextScholarship(studentProgresses);
             request.setAttribute("averageBallToNextScholarship", averageBallToNextScholarship);
         }

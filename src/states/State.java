@@ -62,7 +62,7 @@ public interface State {
 
     default void showSchedule(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            request.getRequestDispatcher("/WEB-INF/view/html/json.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/view/html/schedule.jsp").forward(request, response);
         } catch (Exception exp) {
             exp.printStackTrace();
         }

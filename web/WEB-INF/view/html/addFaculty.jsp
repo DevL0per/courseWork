@@ -9,11 +9,15 @@
 <html>
 <head>
     <title>addFaculty</title>
+    <style><%@include file="../css/addFormStyle.css"%></style>
 </head>
 <body>
 <%@ include file="header.jsp"%>
-<form action="<c:url value="/MyServlet"/>" method="get">
+<br/>
+<p class="formHeader">Добавление</p>
+<form action="<c:url value="/MyServlet"/>" method="post" class="addForm">
     <input type="text" name = "newFaculty">
+    <br/>
     <input type="submit" name="parameter" value="добавить факультет">
 </form>
 </body>

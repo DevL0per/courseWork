@@ -8,7 +8,7 @@
 <body>
 <%@ include file="header.jsp"%>
 <br/>
-Специальности
+<div class="pageTitle"><p>Специальности</p></div>
 <hr/>
 <c:forEach var="specialty" items="${requestScope.specialties}">
     <form action="<c:url value="/MyServlet"/>" method="get" class = "listForm">
@@ -16,11 +16,11 @@
         <input type="hidden" name="specialtyId" value="<c:out value="${specialty.id}"/>">
         <input type="submit" name = "specialty" value="<c:out value="${specialty.name}"/>">
     </form>
-
-    <form class="listParameters">
+    <form action="<c:url value="/MyServlet"/>" class="listParameters" method="get">
         <input type="hidden" name="specialtyId" value="<c:out value="${specialty.id}"/>">
         <input type="submit" name="parameter" value="добавить группу">
     </form>
+    <br/><br/>
 </c:forEach>
 </body>
 </html>

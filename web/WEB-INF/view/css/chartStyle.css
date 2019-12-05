@@ -1,0 +1,18 @@
+.chartDiv {
+    text-align: center;
+    width: 500px;
+    height: 500px;
+    margin: 10px auto 10px auto;
+}
+
+#chart_div {
+    width: 500px;
+    height: 400px;
+}
+
+.backButton {
+    width: 150px;
+    height: 20px;
+    background-color: #012362;
+    color: #d7dee2;
+}

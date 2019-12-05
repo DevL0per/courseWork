@@ -27,6 +27,7 @@ public class AuthFilter implements Filter {
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
+        servletRequest.setCharacterEncoding("UTF8");
         final HttpServletRequest req = (HttpServletRequest) servletRequest;
         final HttpServletResponse resp = (HttpServletResponse) servletResponse;
 
@@ -37,7 +38,8 @@ public class AuthFilter implements Filter {
 
         AccountDAO accountDAO = new AccountDAO();
 
-        if(nonNull(session) && nonNull(session.getAttribute("login")) && nonNull(session.getAttribute("password"))) {
+        if(nonNull(session) && nonNull(session.getAttribute("login")) && nonNull(session.getAttribute("password"))
+                && nonNull(session.getAttribute("role")) && session.getAttribute("role") != Role.BANNED) {
             Role role = (Role) req.getSession().getAttribute("role");
             defineTheState(req, resp, filterChain, role);
         }

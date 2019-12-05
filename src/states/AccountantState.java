@@ -315,6 +315,9 @@ public class AccountantState implements State {
             Integer facultyId = Integer.valueOf(request.getParameter("facultyId"));
             Specialty specialty = new Specialty(0, newSpecialtyName, facultyId);
             specialtyDAO.create(specialty);
+            Integer id = Integer.valueOf(request.getParameter("facultyId"));
+            showAllSpecialtyInFaculty(request, response, id);
+
         } else {
             Integer id = Integer.valueOf(request.getParameter("facultyId"));
             request.setAttribute("facultyId", id);
@@ -331,11 +334,11 @@ public class AccountantState implements State {
         if (request.getParameter("newGroup") != null) {
             Integer newGroupName = Integer.valueOf(request.getParameter("newGroup"));
             Integer newGroupCourse = Integer.valueOf(request.getParameter("newGroupCourse"));
-
             Integer specialtyId = Integer.valueOf(request.getParameter("specialtyId"));
 
             Group group = new Group(newGroupName, newGroupCourse, specialtyId);
             groupDAO.create(group);
+            showAllGroupsInSpecialty(request, response, specialtyId);
         } else {
             Integer id = Integer.valueOf(request.getParameter("specialtyId"));
             request.setAttribute("specialtyId", id);
@@ -353,6 +356,7 @@ public class AccountantState implements State {
             String newFacultyName = request.getParameter("newFaculty");
 
             Faculty faculty = new Faculty(0, newFacultyName);
+            showAllFaculties(request, response);
             facultyDAO.create(faculty);
         } else {
             try {

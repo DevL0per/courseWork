@@ -7,7 +7,7 @@
 </head>
 <body>
 <%@ include file="header.jsp"%>
-Студенты
+<div class="pageTitle"><p>Студенты</p></div>
 <hr/>
 
 <form action="<c:url value="/MyServlet"/>" method="get" class = "searchStudentsForm">

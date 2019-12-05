@@ -1,6 +1,3 @@
-<%@ page import="model.university.Subject" %>
-<%@ page import="java.util.List" %>
-<%@ page import="model.university.StudentProgress" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -40,23 +37,21 @@
     <p>курс: ${group.course}</p>
     <p>специальности: ${specialty.name}</p>
     <p>успеваемость: </p>
-    <%if (request.getAttribute("subjects") != null){ %>
+    <%if (request.getAttribute("studentProgresses") != null){ %>
     <table border="1" width="100%" cellpadding="5">
         <tr>
             <th>Семестр</th>
             <th>Предмет</th>
             <th>Оценка</th>
         </tr>
-        <%List<Subject> subjects = (List) request.getAttribute("subjects");%>
-        <%List<StudentProgress> studentProgress = (List) request.getAttribute("studentProgresses");%>
 
-<%for (int number = 0; number < studentProgress.size(); number++){%>
-        <tr>
-            <td><%=studentProgress.get(number).getNumberOfSemester()%></td>
-            <td><%=subjects.get(number).getName()%></td>
-            <td><%=studentProgress.get(number).getGrade()%></td>
-        </tr>
-        <%}%>
+        <c:forEach items="${requestScope.studentProgresses}" var="count">
+            <tr>
+            <td><c:out value="${count.value.numberOfSemester}"/></td>
+            <td><c:out value="${count.key.name}"/></td>
+            <td><c:out value="${count.value.grade}"/></td>
+            </tr>
+        </c:forEach>
     </table>
     <%} else {%>
     Оценки не выставлены
