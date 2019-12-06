@@ -63,6 +63,14 @@ nav ul li input {
     float: left;
 }
 
+.infoForm {
+    margin: 10px;
+}
+
+.infoForm p {
+    margin-top: 10px;
+}
+
 .pageTitle {
     width: 262px;
     margin: 2px 0 2px 0;

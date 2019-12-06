@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static java.util.Objects.nonNull;
 
@@ -233,8 +232,13 @@ public class StudentState implements State {
     }
 
     @Override
-    public void goToStudentProfile(HttpServletRequest request, HttpServletResponse response, Integer profileId) throws IOException {
+    public void goToStudentProfile(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendError(405);
+    }
+
+    @Override
+    public void addSubject(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.sendError(405);
     }
 
     @Override
@@ -255,6 +259,9 @@ public class StudentState implements State {
         } else {
             Integer studentId = Integer.valueOf(request.getParameter("studentId"));
             Student student = (Student) studentDao.getEntityById(studentId);
+            List groups = groupDAO.getAllWhere("", 0);
+
+            request.setAttribute("groups", groups);
             request.setAttribute("student", student);
             request.getSession().setAttribute("student", student);
             try {
@@ -272,6 +279,7 @@ public class StudentState implements State {
         String newPhoneNumber = request.getParameter("newPhoneNumber");
         String newEmail = request.getParameter("newEmail");
         String newPassword = request.getParameter("newPassword");
+        Integer newGroup = Integer.valueOf(request.getParameter("group"));
 
         int id = student.getStudentNumber();
         int accountId = student.getAccountCode();
@@ -285,14 +293,21 @@ public class StudentState implements State {
         if (!newPatronymic.equals(student.getPatronymic()) && !newPatronymic.isEmpty()) {
             accountDAO.update(accountId, newPatronymic, "Отчество");
         }
-        if (!newPhoneNumber.equals(student.getPhoneNumber()) && !newPhoneNumber.isEmpty()) {
+        newPhoneNumber = newPhoneNumber.trim();
+        if (!newPhoneNumber.equals(student.getPhoneNumber()) && !newPhoneNumber.isEmpty()
+                && newPhoneNumber.length() > 9) {
             accountDAO.update(accountId, newPhoneNumber, "Телефон");
         }
+        newEmail = newEmail.trim();
         if (!newEmail.equals(student.getEmail()) && !newEmail.isEmpty()) {
             accountDAO.update(accountId, newEmail, "Почта");
         }
-        if (!newPassword.equals(student.getPassword()) && !newPassword.isEmpty()) {
+        newPassword = newPassword.trim();
+        if (!newPassword.equals(student.getPassword()) && newPassword.length() > 7) {
             accountDAO.update(accountId, newPassword, "Пароль");
+        }
+        if (!newGroup.equals(student.getNumberOfGroup())) {
+            studentDao.update(student.getStudentNumber(), newGroup, "Группа_НомерГруппы");
         }
     }
 

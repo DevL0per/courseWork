@@ -35,8 +35,6 @@ public interface State {
 
     void showAllStudentsInGroup(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
-    void goToStudentProfile(HttpServletRequest request, HttpServletResponse response, Integer profileId) throws IOException;
-
     void editStudentGrades(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
     void editAccount(HttpServletRequest request, HttpServletResponse response) throws IOException;
@@ -50,6 +48,10 @@ public interface State {
     void addFaculty(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
     void banAccount(HttpServletRequest request, HttpServletResponse response) throws IOException;
+
+    void goToStudentProfile(HttpServletRequest req, HttpServletResponse resp) throws IOException;
+
+    void addSubject(HttpServletRequest req, HttpServletResponse resp) throws IOException;
 
     default void removeUserAttributes(HttpServletRequest request, HttpServletResponse response) {
         request.removeAttribute("login");
@@ -67,5 +69,4 @@ public interface State {
             exp.printStackTrace();
         }
     }
-
 }

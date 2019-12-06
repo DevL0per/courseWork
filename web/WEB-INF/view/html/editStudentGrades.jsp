@@ -18,6 +18,11 @@
             <input type="submit" name = "parameter" value="редактировать оценки"/>
     </form>
 </c:forEach>
+    <div class="errorMessageClass">
+        <c:if test="${errorMessage != null}">
+            ${errorMessage}
+        </c:if>
+    </div>
 </div>
 </body>
 </html>

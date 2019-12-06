@@ -215,18 +215,22 @@ public class AccountantState implements State {
     }
 
     @Override
-    public void goToStudentProfile(HttpServletRequest request, HttpServletResponse response, Integer profileId) throws IOException {
-
+    public void goToStudentProfile(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Integer studentId = Integer.valueOf(request.getParameter("studentId"));
+        Student student = (Student) studentDao.getEntityById(studentId);
+        request.setAttribute("student", student);
+        try {
+            request.getRequestDispatcher("/WEB-INF/view/html/studentProfile.jsp").forward(request, response);
+        } catch (Exception exp) {
+            exp.printStackTrace();
+        }
     }
 
     @Override
     public void editStudentGrades(HttpServletRequest request, HttpServletResponse response) throws IOException {
         boolean flag = false;
         if (request.getParameter("gradeId") != null) {
-            Integer id = Integer.valueOf(request.getParameter("gradeId"));
-            Integer value = Integer.valueOf(request.getParameter("value"));
-            studentProgressDAO.update(id, value, "Оценка");
-            flag = true;
+            flag = editStudentGrade(request);
         }
 
         Integer studentId;
@@ -270,9 +274,22 @@ public class AccountantState implements State {
         }
     }
 
+    private boolean editStudentGrade(HttpServletRequest request) {
+        Integer id = Integer.valueOf(request.getParameter("gradeId"));
+        Integer grade = null;
+        try {
+            grade = Integer.valueOf(request.getParameter("value"));
+        } catch (Exception ex) {
+            request.setAttribute("errorMessage", "Некорректный ввод");
+            return false;
+        }
+        studentProgressDAO.update(id, grade, "Оценка");
+        return true;
+    }
+
     @Override
     public void editAccount(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+        response.sendError(405);
     }
 
     @Override
@@ -396,6 +413,43 @@ public class AccountantState implements State {
         for (int number = 0; number < groups.size(); number++) {
             if (groups.get(number).getNumberOfGroup().equals(newGroupNameInteger)) {
                 request.setAttribute("errorMessage", "Группа уже существует");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void addSubject(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String newSubjectName = req.getParameter("newSubjectName");
+
+        if(newSubjectName != null && checkNewSubject(req, newSubjectName)) {
+            newSubjectName = newSubjectName.trim();
+            newSubjectName = newSubjectName.substring(0,1).toUpperCase() + newSubjectName.substring(1);
+            Subject subject = new Subject(0, newSubjectName);
+            subjectDAO.create(subject);
+            showAllFaculties(req, resp);
+        } else {
+            try {
+                req.getRequestDispatcher("/WEB-INF/view/html/addSubject.jsp").forward(req, resp);
+            } catch (Exception exp) {
+                exp.printStackTrace();
+            }
+        }
+
+    }
+
+    private boolean checkNewSubject(HttpServletRequest req, String newSubjectName ) {
+        newSubjectName = newSubjectName.trim();
+        if (newSubjectName.isEmpty()) {
+            req.setAttribute("errorMessage", "Некорректный ввод");
+            return false;
+        }
+        newSubjectName = newSubjectName.substring(0,1).toUpperCase() + newSubjectName.substring(1);
+        List<Subject> subjectList = subjectDAO.getAllWhere("", 0);
+        for (Subject subject : subjectList) {
+            if (subject.getName().equals(newSubjectName)) {
+                req.setAttribute("errorMessage", "Предмет уже существует");
                 return false;
             }
         }

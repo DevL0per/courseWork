@@ -12,6 +12,7 @@
  <hr/>
  <form action="<c:url value="/MyServlet"/>" method="post" class = "addFacultyButton">
      <input type="submit" name = "parameter" value="добавить факультет">
+     <input type="submit" name="parameter" value="добавить предмет">
  </form>
  <c:forEach var="faculty" items="${requestScope.faculties}">
      <p>

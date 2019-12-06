@@ -56,6 +56,12 @@ public class MyServlet extends HttpServlet {
             case "выставить оценоки":
                 state.showStudentGradesScreen(req, resp);
                 break;
+            case "профиль студента":
+                state.goToStudentProfile(req, resp);
+                break;
+            case "добавить предмет":
+                state.addSubject(req, resp);
+                break;
             case "редактировать оценки":
                 state.editStudentGrades(req, resp);
                 break;
@@ -105,6 +111,9 @@ public class MyServlet extends HttpServlet {
                 break;
             case "добавить группу":
                 state.addGroup(req, resp);
+                break;
+            case "добавить предмет":
+                state.addSubject(req, resp);
                 break;
             case "редактировать аккаунт":
                 state.editAccount(req, resp);

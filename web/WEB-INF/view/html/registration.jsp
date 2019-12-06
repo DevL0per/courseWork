@@ -38,7 +38,7 @@
 
         <div class = "field">
             <label for = "in4">Номер студенческого</label>
-            <input type = "text" name = "studentNumber" id = "in4"><br/>
+            <input type = "number" name = "studentNumber" id = "in4"><br/>
         </div>
 
         <div class = "field">
@@ -53,7 +53,7 @@
 
         <div class = "field">
             <label for = "in5">Телефон</label>
-            <input type = "text" name = "number" id = "in5"><br/>
+            <input type = "number" name = "number" id = "in5"><br/>
         </div>
 
         <div class = "field">

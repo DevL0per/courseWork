@@ -32,6 +32,7 @@
         </c:if>
         <input type="submit" name = "parameter" value="редактировать оценки">
         <input type="hidden" name="studentId" value="<c:out value="${student.studentNumber}"/>">
+        <input type="submit" name="parameter" value="профиль студента">
     </form>
     <br/>
     <br/>

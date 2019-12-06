@@ -4,13 +4,10 @@ import javax.validation.constraints.NotNull;
 
 public class Student extends AbstractUser {
 
-    @NotNull(message = "номер студенческого билета не должен быть пустым")
     private Integer studentNumber;
-    @NotNull(message = "поле номер группы не может быть пустым")
     private Integer numberOfGroup;
     private Role role;
     private Double scholarship;
-    @NotNull(message = "поле форма обучения не может быть пустым")
     private String formOfTraining;
 
     public Student(String name, String surname, String patronymic,

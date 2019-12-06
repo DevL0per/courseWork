@@ -38,17 +38,27 @@
 
         <div class = "field">
             <label for = "in5">Телефон</label>
-            <input type = "text" name = "newPhoneNumber" id = "in5" value="${student.phoneNumber}"><br/>
+            <input type = "number" name = "newPhoneNumber" id = "in5" value="${student.phoneNumber}"><br/>
         </div>
 
         <div class = "field">
             <label for = "in6">Почта</label>
-            <input type = "text" name = "newEmail" id = "in6" value="${student.email}"><br/>
+            <input type = "email" name = "newEmail" id = "in6" value="${student.email}"><br/>
         </div>
 
         <div class = "field">
             <label for = "in7">Пароль</label>
             <input type = "password" name = "newPassword" id = "in7" value="${student.password}"><br/>
+        </div>
+
+        <div class = "field">
+            <label for = "sel2">Группа</label>
+            <select id = "sel2" name="group">
+                <c:forEach var="group" items="${requestScope.groups}">
+                    <option><c:out value="${group.numberOfGroup}"/></option>
+                </c:forEach>
+            </select>
+            <br/>
         </div>
 
         <input type = "submit" name="parameter" value = "редактировать аккаунт" class = "registrationButton">

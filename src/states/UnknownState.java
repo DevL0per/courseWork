@@ -96,8 +96,13 @@ public class UnknownState implements State {
     }
 
     @Override
-    public void goToStudentProfile(HttpServletRequest request, HttpServletResponse response, Integer profileId) throws IOException {
+    public void goToStudentProfile(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendError(405);
+    }
+
+    @Override
+    public void addSubject(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.sendError(405);
     }
 
     @Override
@@ -112,6 +117,7 @@ public class UnknownState implements State {
 
     @Override
     public void showStudentGradesScreen(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(405);
     }
 
     @Override
