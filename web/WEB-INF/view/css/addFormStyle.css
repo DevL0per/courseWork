@@ -36,3 +36,10 @@
     background-color: #d7dee2;
     margin: 0px auto 10px auto;
 }
+
+.errorMessageClass {
+    width: 350px;
+    text-align: center;
+    margin: 10px auto 0 auto;
+    color: darkred;
+}

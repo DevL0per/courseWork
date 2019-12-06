@@ -58,6 +58,6 @@ public class StudentProgress implements Comparable<StudentProgress> {
 
     @Override
     public int compareTo(StudentProgress studentProgress) {
-        return (this.getNumberOfSemester() - studentProgress.getNumberOfSemester());
+        return (this.getNumberOfGrade() - studentProgress.getNumberOfGrade());
     }
 }

@@ -191,6 +191,7 @@ public class StudentDao extends AbstractDAO {
             statement.setString(4, user.getPhoneNumber());
             statement.setString(5, user.getEmail());
             statement.setString(6, user.getPassword());
+
         } catch (SQLException exp) {
             exp.printStackTrace();
         }

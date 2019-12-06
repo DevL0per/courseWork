@@ -37,27 +37,32 @@
     <p>курс: ${group.course}</p>
     <p>специальности: ${specialty.name}</p>
     <p>успеваемость: </p>
-    <%if (request.getAttribute("studentProgresses") != null){ %>
-    <table border="1" width="100%" cellpadding="5">
-        <tr>
-            <th>Семестр</th>
-            <th>Предмет</th>
-            <th>Оценка</th>
-        </tr>
 
-        <c:forEach items="${requestScope.studentProgresses}" var="count">
-            <tr>
-            <td><c:out value="${count.value.numberOfSemester}"/></td>
-            <td><c:out value="${count.key.name}"/></td>
-            <td><c:out value="${count.value.grade}"/></td>
-            </tr>
-        </c:forEach>
-    </table>
-    <%} else {%>
-    Оценки не выставлены
-    <%}%>
+    <c:choose>
+        <c:when test="${studentProgresses != null}">
+            <table border="1" width="100%" cellpadding="5">
+                <tr>
+                    <th>Семестр</th>
+                    <th>Предмет</th>
+                    <th>Оценка</th>
+                </tr>
+
+                <c:forEach items="${requestScope.studentProgresses}" var="count">
+                    <tr>
+                        <td><c:out value="${count.key.numberOfSemester}"/></td>
+                        <td><c:out value="${count.value.name}"/></td>
+                        <td><c:out value="${count.key.grade}"/></td>
+                    </tr>
+                </c:forEach>
+            </table>
+            <br>
+            <p>Осталось балл до повышения стипендии: ${averageBallToNextScholarship}</p>
+        </c:when>
+        <c:when test="${studentProgresses == null}">
+            Оценки не выставлены
+        </c:when>
+    </c:choose>
     <p>Стипендия ${student.scholarship}</p>
-    <p>Осталось балл до повышения стипендии: ${averageBallToNextScholarship}</p>
 </div>
 </body>
 </html>

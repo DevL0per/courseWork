@@ -1,6 +1,6 @@
 package dao;
 
-import ConnectionPull.ConnectionPull;
+import ConnectionPool.ConnectionPool;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,42 +21,30 @@ public abstract class AbstractDAO {
     public abstract boolean create(Object entity);
 
     public void returnConnectionInPool() {
-        ConnectionPull.shared.returnConnection(connection);
+        ConnectionPool.shared.returnConnection(connection);
     }
 
     public PreparedStatement getPrepareStatement(String sql) {
-        connection = ConnectionPull.shared.getConnection();
+        connection = ConnectionPool.shared.getConnection();
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(sql);
         } catch (SQLException exp) {
             exp.printStackTrace();
         }
-        ConnectionPull.shared.returnConnection(connection);
+        ConnectionPool.shared.returnConnection(connection);
         return preparedStatement;
     }
 
     public PreparedStatement getPrepareStatementWithLastSqlId(String sql) {
-        connection = ConnectionPull.shared.getConnection();
+        connection = ConnectionPool.shared.getConnection();
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         } catch (SQLException exp) {
             exp.printStackTrace();
         }
-        ConnectionPull.shared.returnConnection(connection);
+        ConnectionPool.shared.returnConnection(connection);
         return preparedStatement;
-    }
-
-    //public PreparedStatement getPrepareStatementWithGeneratedKe
-
-    public void closePrepareStatement(PreparedStatement preparedStatement) {
-        if (preparedStatement != null) {
-            try {
-                preparedStatement.close();
-            } catch (SQLException exp) {
-                exp.printStackTrace();
-            }
-        }
     }
 }

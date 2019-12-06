@@ -20,5 +20,11 @@
     <br/>
     <input type="submit" name="parameter" value="добавить факультет">
 </form>
+
+<div class="errorMessageClass">
+    <c:if test="${errorMessage != null}">
+        ${errorMessage}
+    </c:if>
+</div>
 </body>
 </html>

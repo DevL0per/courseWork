@@ -91,7 +91,6 @@ public class StudentProgressDAO extends AbstractDAO {
             statement.setInt(4, studentProgress.getNumberOfSubject());
 
             statement.executeUpdate();
-            closePrepareStatement(statement);
         } catch (Exception exp) {
             exp.printStackTrace();
             return false;

@@ -33,7 +33,6 @@ public class GroupDAO extends AbstractDAO {
                 Group group = new Group(groupNumber, course, specialty);
                 list.add(group);
             }
-            closePrepareStatement(statement);
         } catch (SQLException exp) {
             exp.printStackTrace();
         }
@@ -60,7 +59,6 @@ public class GroupDAO extends AbstractDAO {
                 Integer specialtyId = resultSet.getInt("Специальность_КодСпециальности");
                 group = new Group(groupNumber, course, specialtyId);
             }
-            closePrepareStatement(statement);
         } catch (SQLException exp) {
             exp.printStackTrace();
         }
@@ -110,7 +108,6 @@ public class GroupDAO extends AbstractDAO {
                 Group group = new Group(groupNumber, course, specialtyId);
                 list.add(group);
             }
-            closePrepareStatement(statement);
         } catch (SQLException exp) {
             exp.printStackTrace();
         }

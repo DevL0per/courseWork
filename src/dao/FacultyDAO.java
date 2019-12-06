@@ -28,7 +28,6 @@ public class FacultyDAO extends AbstractDAO {
                 Faculty faculty = new Faculty(id, name);
                 list.add(faculty);
             }
-
         } catch (SQLException exp) {
             exp.printStackTrace();
         }

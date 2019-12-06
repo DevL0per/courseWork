@@ -15,5 +15,10 @@
     <input type="hidden" name="parameter" value="добавить специальность">
     <input type="submit" value = "добавить специальность">
 </form>
+<div class="errorMessageClass">
+    <c:if test="${errorMessage != null}">
+        ${errorMessage}
+    </c:if>
+</div>
 </body>
 </html>

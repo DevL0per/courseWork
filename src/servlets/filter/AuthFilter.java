@@ -38,8 +38,7 @@ public class AuthFilter implements Filter {
 
         AccountDAO accountDAO = new AccountDAO();
 
-        if(nonNull(session) && nonNull(session.getAttribute("login")) && nonNull(session.getAttribute("password"))
-                && nonNull(session.getAttribute("role")) && session.getAttribute("role") != Role.BANNED) {
+        if(nonNull(session) && nonNull(session.getAttribute("login")) && nonNull(session.getAttribute("password"))) {
             Role role = (Role) req.getSession().getAttribute("role");
             defineTheState(req, resp, filterChain, role);
         }
@@ -47,6 +46,7 @@ public class AuthFilter implements Filter {
             final Role role = accountDAO.getRoleByLoginAndPassword(login, password);
             if(role.equals(Role.BANNED)) {
                 resp.sendError(401);
+                return;
             }
             req.getSession().setAttribute("login", login);
             req.getSession().setAttribute("password", password);

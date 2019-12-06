@@ -21,5 +21,10 @@
     <input type="hidden" name="specialtyId" value="${specialtyId}">
     <input type="submit" name="parameter" value="добавить группу">
 </form>
+<div class="errorMessageClass">
+    <c:if test="${errorMessage != null}">
+        ${errorMessage}
+    </c:if>
+</div>
 </body>
 </html>

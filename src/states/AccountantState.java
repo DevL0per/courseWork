@@ -9,6 +9,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -23,11 +25,6 @@ public class AccountantState implements State {
     FacultyDAO facultyDAO = new FacultyDAO();
     SpecialtyDAO specialtyDAO = new SpecialtyDAO();
     StudentProgressDAO studentProgressDAO = new StudentProgressDAO();
-
-    List<Group> groups = new CopyOnWriteArrayList<>();
-    List<Specialty> specialties = new CopyOnWriteArrayList<>();
-    List<Faculty> faculties = new CopyOnWriteArrayList<>();
-    List<Student> students = new CopyOnWriteArrayList<>();
 
     @Override
     public void showStatistic(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -66,6 +63,7 @@ public class AccountantState implements State {
 
     @Override
     public void gotoStudentList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(405);
     }
 
     @Override
@@ -95,7 +93,7 @@ public class AccountantState implements State {
             }
         }
 
-        if (formOfTraining != "платная") {
+        if (!formOfTraining.equals("платная")) {
             calculateScholarship(map, userId);
         }
         try {
@@ -128,16 +126,15 @@ public class AccountantState implements State {
         } else if (averageMark>=9 && averageMark<=10) {
             scholarship*=1.6;
         }
+        scholarship = new BigDecimal(scholarship).setScale(2, RoundingMode.UP).doubleValue();
         studentDao.addStudentScholarshipById(userId, scholarship);
     }
 
 
     @Override
     public void showAllFaculties(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (!nonNull(request.getAttribute("faculties"))) {
-            faculties = facultyDAO.getAllWhere("", 0);
-            request.setAttribute("faculties", faculties);
-        }
+        List<Faculty> faculties = facultyDAO.getAllWhere("", 0);
+        request.setAttribute("faculties", faculties);
         try {
             request.getRequestDispatcher("/WEB-INF/view/html/listOfFaculty.jsp").forward(request, response);
         } catch (Exception exp) {
@@ -148,7 +145,7 @@ public class AccountantState implements State {
     @Override
     public void showAllSpecialtyInFaculty(HttpServletRequest request, HttpServletResponse response, Integer facultyId) throws IOException {
         if (!nonNull(request.getAttribute("specialties"))) {
-            specialties = specialtyDAO.getAllSpecialtyInFaculty(facultyId);
+            List<Specialty> specialties = specialtyDAO.getAllSpecialtyInFaculty(facultyId);
             request.setAttribute("specialties", specialties);
         }
         try {
@@ -161,7 +158,7 @@ public class AccountantState implements State {
     @Override
     public void showAllGroupsInSpecialty(HttpServletRequest request, HttpServletResponse response, Integer specialtyId) throws IOException {
         if (!nonNull(request.getAttribute("groups"))) {
-            groups = groupDAO.getAllGroupInSpecialty(specialtyId);
+            List<Group> groups = groupDAO.getAllGroupInSpecialty(specialtyId);
             request.setAttribute("groups", groups);
         }
         try {
@@ -207,7 +204,7 @@ public class AccountantState implements State {
                 exp.printStackTrace();
             }
         } else {
-            students = studentDao.getAllWhere("WHERE Группа_НомерГруппы = ?", groupId);
+            List<Student> students = studentDao.getAllWhere("WHERE Группа_НомерГруппы = ?", groupId);
             request.setAttribute("students", students);
             try {
                 request.getRequestDispatcher("/WEB-INF/view/html/accountantListOfStudents.jsp").forward(request, response);
@@ -309,18 +306,18 @@ public class AccountantState implements State {
 
     @Override
     public void addSpecialty(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (request.getParameter("newSpecialty") != null) {
-            String newSpecialtyName = request.getParameter("newSpecialty");
+        Integer facultyId = Integer.valueOf(request.getParameter("facultyId"));
+        String newSpecialtyName = request.getParameter("newSpecialty");
 
-            Integer facultyId = Integer.valueOf(request.getParameter("facultyId"));
+        if (newSpecialtyName != null && checkNewSpecialty(newSpecialtyName, facultyId, request)) {
+            newSpecialtyName = newSpecialtyName.trim();
+            newSpecialtyName = newSpecialtyName.toUpperCase();
             Specialty specialty = new Specialty(0, newSpecialtyName, facultyId);
             specialtyDAO.create(specialty);
-            Integer id = Integer.valueOf(request.getParameter("facultyId"));
-            showAllSpecialtyInFaculty(request, response, id);
+            showAllSpecialtyInFaculty(request, response, facultyId);
 
         } else {
-            Integer id = Integer.valueOf(request.getParameter("facultyId"));
-            request.setAttribute("facultyId", id);
+            request.setAttribute("facultyId", facultyId);
             try {
                 request.getRequestDispatcher("/WEB-INF/view/html/addSpecialty.jsp").forward(request, response);
             } catch (Exception exp) {
@@ -329,19 +326,44 @@ public class AccountantState implements State {
         }
     }
 
+    private boolean checkNewSpecialty(String newSpecialtyName, Integer facultyId, HttpServletRequest request) {
+        if (newSpecialtyName == null) {
+            request.setAttribute("errorMessage", "Некорректный ввод");
+            return false;
+        }
+        newSpecialtyName = newSpecialtyName.trim();
+        newSpecialtyName = newSpecialtyName.toUpperCase();
+        if (newSpecialtyName.isEmpty()) {
+            request.setAttribute("errorMessage", "Некорректный ввод");
+            return false;
+        }
+        List<Specialty> specialties = specialtyDAO.getAllSpecialtyInFaculty(facultyId);
+        for (Specialty specialty : specialties) {
+            if (specialty.getName().equals(newSpecialtyName)) {
+                request.setAttribute("errorMessage", "Специальность уже существует");
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public void addGroup(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (request.getParameter("newGroup") != null) {
-            Integer newGroupName = Integer.valueOf(request.getParameter("newGroup"));
-            Integer newGroupCourse = Integer.valueOf(request.getParameter("newGroupCourse"));
-            Integer specialtyId = Integer.valueOf(request.getParameter("specialtyId"));
 
-            Group group = new Group(newGroupName, newGroupCourse, specialtyId);
+        Integer specialtyId = Integer.valueOf(request.getParameter("specialtyId"));
+        String newGroupName = request.getParameter("newGroup");
+        String newGroupCourse = request.getParameter("newGroupCourse");
+
+        if (newGroupName != null && checkNewGroup(newGroupName, newGroupCourse, specialtyId,request)) {
+
+            Integer newGroupNameInt = Integer.valueOf(request.getParameter("newGroup"));
+            Integer newGroupCourseInt = Integer.valueOf(request.getParameter("newGroupCourse"));
+
+            Group group = new Group(newGroupNameInt, newGroupCourseInt, specialtyId);
             groupDAO.create(group);
             showAllGroupsInSpecialty(request, response, specialtyId);
         } else {
-            Integer id = Integer.valueOf(request.getParameter("specialtyId"));
-            request.setAttribute("specialtyId", id);
+            request.setAttribute("specialtyId", specialtyId);
             try {
                 request.getRequestDispatcher("/WEB-INF/view/html/addGroup.jsp").forward(request, response);
             } catch (Exception exp) {
@@ -350,11 +372,43 @@ public class AccountantState implements State {
         }
     }
 
+    private boolean checkNewGroup(String newGroupName, String newGroupCourse,
+                                 Integer specialtyId, HttpServletRequest request) {
+        if (newGroupName == null || newGroupCourse == null ) {
+            request.setAttribute("errorMessage", "Некорректный ввод");
+            return false;
+        }
+        newGroupName = newGroupName.trim();
+        newGroupCourse = newGroupCourse.trim();
+        if (newGroupName.length() != 6 || newGroupCourse.length() == 0) {
+            request.setAttribute("errorMessage", "Некорректный ввод");
+            return false;
+        }
+        Integer newGroupNameInteger;
+        try {
+            newGroupNameInteger = Integer.valueOf(newGroupName);
+            Integer newGroupCourseInteger = Integer.valueOf(newGroupCourse);
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "Некорректный ввод");
+            return false;
+        }
+        List<Group> groups = groupDAO.getAllGroupInSpecialty(specialtyId);
+        for (int number = 0; number < groups.size(); number++) {
+            if (groups.get(number).getNumberOfGroup().equals(newGroupNameInteger)) {
+                request.setAttribute("errorMessage", "Группа уже существует");
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public void addFaculty(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (request.getParameter("newFaculty") != null) {
-            String newFacultyName = request.getParameter("newFaculty");
+        String newFacultyName = request.getParameter("newFaculty");
 
+        if (newFacultyName != null && checkNewFaculty(newFacultyName, request)) {
+            newFacultyName = newFacultyName.toUpperCase();
+            newFacultyName = newFacultyName.trim();
             Faculty faculty = new Faculty(0, newFacultyName);
             showAllFaculties(request, response);
             facultyDAO.create(faculty);
@@ -365,6 +419,27 @@ public class AccountantState implements State {
                 exp.printStackTrace();
             }
         }
+    }
+
+    private boolean checkNewFaculty(String newFacultyName, HttpServletRequest request) {
+        if (newFacultyName == null) {
+            request.setAttribute("errorMessage", "Некорректный ввод");
+            return false;
+        }
+        newFacultyName = newFacultyName.toUpperCase();
+        newFacultyName = newFacultyName.trim();
+        if (newFacultyName.isEmpty()) {
+            request.setAttribute("errorMessage", "Некорректный ввод");
+            return false;
+        }
+        List<Faculty> faculties = facultyDAO.getAllWhere("", 0);
+        for (Faculty faculty : faculties) {
+            if (faculty.getName().equals(newFacultyName)) {
+                request.setAttribute("errorMessage", "Факультет уже существует");
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

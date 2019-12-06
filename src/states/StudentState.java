@@ -7,6 +7,8 @@ import model.university.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -21,13 +23,6 @@ public class StudentState implements State {
     SpecialtyDAO specialtyDAO = new SpecialtyDAO();
     AccountDAO accountDAO = new AccountDAO();
     StudentProgressDAO studentProgressesDao = new StudentProgressDAO();
-
-    List<Group> groups = new CopyOnWriteArrayList<>();
-    List<Specialty> specialties = new CopyOnWriteArrayList<>();
-    List<Faculty> faculties = new CopyOnWriteArrayList<>();
-    List<Student> students = new CopyOnWriteArrayList<>();
-    List<StudentProgress> studentProgresses = new CopyOnWriteArrayList<>();
-    List<Subject> subjects = new CopyOnWriteArrayList<>();
 
     @Override
     public void showStatistic(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -44,11 +39,10 @@ public class StudentState implements State {
         for (Integer semester : gradesPerSemester.keySet()) {
             int averageMark = 0;
             int counter = 0;
-            for (int number = 0; number < grades.size(); number++) {
-                StudentProgress progress = grades.get(number);
-                if (progress.getNumberOfSemester() == semester) {
-                    averageMark+=progress.getGrade();
-                    counter+=1;
+            for (StudentProgress progress : grades) {
+                if (progress.getNumberOfSemester().equals(semester)) {
+                    averageMark += progress.getGrade();
+                    counter += 1;
                 }
             }
             averageMark/=counter;
@@ -73,7 +67,7 @@ public class StudentState implements State {
         String login = (String) request.getSession().getAttribute("login");
         String password = (String) request.getSession().getAttribute("password");
 
-        SortedMap<Subject, StudentProgress> studentProgressMap = new TreeMap<Subject, StudentProgress>();
+        SortedMap<StudentProgress, Subject> studentProgressMap = new TreeMap<StudentProgress, Subject>();
 
         Integer id = accountDAO.getIdByAccountIdByLoginAndPassword(login, password);
 
@@ -82,16 +76,16 @@ public class StudentState implements State {
         Group group = (Group) groupDAO.getEntityById(student.getNumberOfGroup());
         Specialty specialty = (Specialty) specialtyDAO.getEntityById(group.getSpecialtyId());
 
-        studentProgresses = studentProgressesDao.getAllWhere( "WHERE Студент_НомерСтудБилета = ?", student.getStudentNumber());
+        List<StudentProgress> studentProgresses = studentProgressesDao.getAllWhere( "WHERE Студент_НомерСтудБилета = ?", student.getStudentNumber());
         sortStudentProgressBySemester(studentProgresses);
 
         if (studentProgresses.isEmpty()) {
-            request.setAttribute("subjects", null);
+            request.setAttribute("studentProgresses", null);
         } else {
-            for (int number = 0; number < studentProgresses.size(); number++) {
-                Integer subjectId = studentProgresses.get(number).getNumberOfSubject();
+            for (StudentProgress studentProgress : studentProgresses) {
+                Integer subjectId = studentProgress.getNumberOfSubject();
                 Subject subject = (Subject) subjectDAO.getEntityById(subjectId);
-                studentProgressMap.put(subject, studentProgresses.get(number));
+                studentProgressMap.put(studentProgress, subject);
             }
             request.setAttribute("studentProgresses", studentProgressMap);
             double averageBallToNextScholarship = calculateAverageBallToNextScholarship(studentProgresses);
@@ -124,16 +118,20 @@ public class StudentState implements State {
         }
         averageBall/=counter;
 
+        double finalBall = 0;
+
         if (averageBall < 5) {
-            return 5-averageBall;
+            finalBall = 5-averageBall;
         } else if (averageBall < 6) {
-            return 6 - averageBall;
+            finalBall = 6 - averageBall;
         } else if (averageBall < 8) {
-            return 8-averageBall;
+            finalBall = 8-averageBall;
         } else  if (averageBall < 9) {
-            return 9-averageBall;
+            finalBall = 9-averageBall;
         }
-        return 0;
+
+        finalBall = new BigDecimal(finalBall).setScale(2, RoundingMode.UP).doubleValue();
+        return finalBall;
     }
 
     public void sortStudentProgressBySemester(List<StudentProgress> studentProgresses) {
@@ -184,7 +182,7 @@ public class StudentState implements State {
     @Override
     public void showAllFaculties(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (!nonNull(request.getAttribute("faculties"))) {
-            faculties = facultyDAO.getAllWhere("", 0);
+            List<Faculty> faculties = facultyDAO.getAllWhere("", 0);
             request.setAttribute("faculties", faculties);
         }
         try {
@@ -197,7 +195,7 @@ public class StudentState implements State {
     @Override
     public void showAllSpecialtyInFaculty(HttpServletRequest request, HttpServletResponse response, Integer facultyId) throws IOException {
         if (!nonNull(request.getAttribute("specialties"))) {
-            specialties = specialtyDAO.getAllSpecialtyInFaculty(facultyId);
+            List<Specialty> specialties = specialtyDAO.getAllSpecialtyInFaculty(facultyId);
             request.setAttribute("specialties", specialties);
         }
         try {
@@ -210,7 +208,7 @@ public class StudentState implements State {
     @Override
     public void showAllGroupsInSpecialty(HttpServletRequest request, HttpServletResponse response, Integer specialtyId) throws IOException {
         if (!nonNull(request.getAttribute("groups"))) {
-            groups = groupDAO.getAllGroupInSpecialty(specialtyId);
+            List<Group> groups = groupDAO.getAllGroupInSpecialty(specialtyId);
             request.setAttribute("groups", groups);
         }
         try {
@@ -224,7 +222,7 @@ public class StudentState implements State {
     public void showAllStudentsInGroup(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Integer groupId = Integer.valueOf(request.getParameter("group"));
         if (!nonNull(request.getAttribute("students"))) {
-            students = studentDao.getAllWhere("WHERE Группа_НомерГруппы = ?", groupId);
+            List<Student> students = studentDao.getAllWhere("WHERE Группа_НомерГруппы = ?", groupId);
             request.setAttribute("students", students);
         }
         try {

@@ -36,7 +36,6 @@ public class SpecialtyDAO extends AbstractDAO {
                 Integer facultyCode = resultSet.getInt("Факультет_КодФакультета");
                 specialty = new Specialty(id, name, facultyCode);
             }
-            closePrepareStatement(statement);
         } catch (SQLException exp) {
             exp.printStackTrace();
         }
@@ -56,7 +55,6 @@ public class SpecialtyDAO extends AbstractDAO {
                 Specialty specialty = new Specialty(id, name, facultyId);
                 list.add(specialty);
             }
-            closePrepareStatement(statement);
         } catch (SQLException exp) {
             exp.printStackTrace();
         }

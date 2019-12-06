@@ -1,7 +1,6 @@
 package dao;
 
 import model.Role;
-import model.university.Faculty;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -43,8 +42,6 @@ public class AccountDAO extends AbstractDAO {
         } catch (Exception exp) {
             exp.printStackTrace();
             return false;
-        } finally {
-            closePrepareStatement(statement);
         }
     }
 

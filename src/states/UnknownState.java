@@ -31,10 +31,8 @@ public class UnknownState implements State {
     @Override
     public void doRegistration(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        faculties = facultyDAO.getAllWhere("", 0);
         groups = groupDAO.getAllWhere("", 0);
 
-        request.setAttribute("faculties", faculties);
         request.setAttribute("groups", groups);
         try {
             request.getRequestDispatcher(registrationScreenPath).forward(request, response);

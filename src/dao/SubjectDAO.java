@@ -49,7 +49,6 @@ public class SubjectDAO extends AbstractDAO {
                 String name = resultSet.getString("Название");
                 subject = new Subject(id, name);
             }
-            closePrepareStatement(statement);
         } catch (Exception exp) {
             exp.printStackTrace();
         }
@@ -66,7 +65,6 @@ public class SubjectDAO extends AbstractDAO {
             while (resultSet.next()) {
                 id = resultSet.getInt("КодПредмета");
             }
-            closePrepareStatement(statement);
         } catch (Exception exp) {
             exp.printStackTrace();
         }

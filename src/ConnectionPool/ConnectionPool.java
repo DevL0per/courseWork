@@ -1,20 +1,20 @@
-package ConnectionPull;
+package ConnectionPool;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.*;
 
-public class ConnectionPull {
+public class ConnectionPool {
 
-    public static ConnectionPull shared = new ConnectionPull();
+    public static ConnectionPool shared = new ConnectionPool();
 
     private List<Connection> connections = new ArrayList<>(NUMBER_OF_CONNECTION);
     private Queue<Connection> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(Object::hashCode));
 
     private static final int NUMBER_OF_CONNECTION = 5;
 
-    private ConnectionPull() {
+    private ConnectionPool() {
 
         String userName = "root";
         String password = "roma1586100";

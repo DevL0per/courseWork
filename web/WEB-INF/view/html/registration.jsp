@@ -42,16 +42,6 @@
         </div>
 
         <div class = "field">
-            <label for = "sel1">Факультет</label>
-            <select id = "sel1" name = "faculty">
-                <c:forEach var="faculty" items="${requestScope.faculties}">
-                    <option><c:out value="${faculty.name}"/></option>
-                </c:forEach>
-            </select>
-            <br/>
-        </div>
-
-        <div class = "field">
             <label for = "sel2">Группа</label>
             <select id = "sel2" name="group">
                 <c:forEach var="group" items="${requestScope.groups}">
@@ -68,7 +58,7 @@
 
         <div class = "field">
             <label for = "in6">Почта</label>
-            <input type = "text" name = "email" id = "in6"><br/>
+            <input type = "email" name = "email" id = "in6"><br/>
         </div>
 
         <div class = "field">
@@ -87,6 +77,14 @@
         <input type="submit" value = "Регистрация" class = "registrationButton">
 
     </form>
+
+    <div class="errorMessageClass">
+
+        <c:if test="${errorMessage != null}">
+            ${errorMessage}
+        </c:if>
+    </div>
+
 </div>
 </body>
 </html>
